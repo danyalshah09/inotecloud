@@ -1,7 +1,10 @@
-import React from 'react'
-
+import React, { useEffect, useContext } from "react";
+import { Notes } from "./Notes";
 export const Home = () => {
-  return (
-    <div>this is my Homepage</div>
-  )
-}
+  
+    return (
+        <>
+      <Notes/>
+      </>
+    );
+};
