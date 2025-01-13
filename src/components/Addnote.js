@@ -1,60 +1,42 @@
-import React, { useContext, useState } from 'react';
-import { NoteContext } from "../context/notes/NoteState"; // Corrected import
-import { Notes } from './Notes';
+import React, {useContext, useState} from 'react'
+import noteContext from "../context/notes/noteContext"
 
-export const Addnote = () => {
-    const context = useContext(NoteContext); // NoteContext matches the export
-    const { addnote } = context;
+const AddNote = () => {
+    const context = useContext(noteContext);
+    const {addNote} = context;
 
-    // useState moved to the top level of the component
-    const [note, setnote] = useState({ title: "", description: "", tag: "" });
+    const [note, setNote] = useState({title: "", description: "", tag: "default"})
 
     const handleClick = (e) => {
-        e.preventDefault(); // Prevent form submission
-        addnote(note); // Call the context function to add the note
-        setnote({ title: "", description: "", tag: "" }); // Clear the form after adding
+        e.preventDefault();
+        addNote(note.title, note.description, note.tag);
+        setNote({ title: "", description: "", tag: "default" });
     };
+    
 
-    const onChange = (e) => {
-        setnote({ ...note, [e.target.name]: e.target.value });
-    };
-
+    const onChange = (e)=>{
+        setNote({...note, [e.target.name]: e.target.value})
+    }
     return (
-        <div className="container">
-            <h1>Add a Note</h1>
-            <form>
-                <div className="form-group">
-                    <label htmlFor="title">Add new note</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="title"
-                        name="title"
-                        value={note.title} // Bind state
-                        placeholder="Enter your Title"
-                        onChange={onChange}
-                    />
+        <div className="container my-3">
+            <h2>Add a Note</h2>
+            <form className="my-3">
+                <div className="mb-3">
+                    <label htmlFor="title" className="form-label">Title</label>
+                    <input type="text" className="form-control" id="title" name="title" aria-describedby="emailHelp" onChange={onChange} /> 
                 </div>
-                <div className="form-group">
-                    <label htmlFor="description">Description</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="description"
-                        name="description"
-                        value={note.description} // Bind state
-                        placeholder="Enter Description"
-                        onChange={onChange}
-                    />
+                <div className="mb-3">
+                    <label htmlFor="description" className="form-label">Description</label>
+                    <input type="text" className="form-control" id="description" name="description" onChange={onChange} />
                 </div>
-                <button type="submit" onClick={handleClick} className="btn btn-primary">
-                    Add Note
-                </button>
+                <div className="mb-3 form-check">
+                    <input type="checkbox" className="form-check-input" id="exampleCheck1" />
+                    <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
+                </div>
+                <button type="submit" className="btn btn-primary" onClick={handleClick}>Submit</button>
             </form>
-            <div className="container my-3">
-                <h1>Your Notes</h1>
-                <Notes />
-            </div>
         </div>
-    );
-};
+    )
+}
+
+export default AddNote

@@ -1,10 +1,12 @@
-import React, { useEffect, useContext } from "react";
-import { Notes } from "./Notes";
-export const Home = () => {
-  
+import Notes from './Notes';
+
+ const Home = () => {
+
     return (
-        <>
-      <Notes/>
-      </>
-    );
-};
+        <div> 
+            <Notes/>
+        </div>
+    )
+}
+
+export default Home

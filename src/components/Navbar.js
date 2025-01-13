@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-export const Navbar = () => {
+ const Navbar = () => {
   const location = useLocation(); // Use the hook to get the current location
   
   return (
@@ -24,3 +24,5 @@ export const Navbar = () => {
     </nav>
   );
 };
+
+export default Navbar

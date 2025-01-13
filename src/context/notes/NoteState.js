@@ -1,80 +1,105 @@
-import React, { createContext, useState } from "react";
+import NoteContext from "./noteContext";
+import { useState } from "react";
 
-// Create a Context
-const NoteContext = createContext();
+const NoteState = (props)=>{
+    const notesInitial = [
+        {
+          "_id": "61322f195153781a8ca8d0e06",
+          "user": "6131dc5e3e4037cd4734a066",
+          "title": "My Title",
+          "description": "Please wake up early",
+          "tag": "personal",
+          "date": "2021-09-03T14:20:09.509Z",
+          "__v": 0
+        },
+        {
+          "_id": "61322f195531781a8ca8d0e08",
+          "user": "6131dc5e3e4037cd4734a066",
+          "title": "My Title",
+          "description": "Please wake up early",
+          "tag": "personal",
+          "date": "2021-09-03T14:20:09.668Z",
+          "__v": 0
+        },
+        {
+          "_id": "61322f19553781a8ca8d0e081",
+          "user": "6131dc5e3e4037cd4734a066",
+          "title": "My Title",
+          "description": "Please wake up early",
+          "tag": "personal",
+          "date": "2021-09-03T14:20:09.668Z",
+          "__v": 0
+        },
+        {
+          "_id": "61322f19553781a8ca8d0e082",
+          "user": "6131dc5e3e4037cd4734a066",
+          "title": "My Title",
+          "description": "Please wake up early",
+          "tag": "personal",
+          "date": "2021-09-03T14:20:09.668Z",
+          "__v": 0
+        },
+        {
+          "_id": "61322f195537812a8ca8d0e08",
+          "user": "6131dc5e3e4037cd4734a066",
+          "title": "My Title",
+          "description": "Please wake up early",
+          "tag": "personal",
+          "date": "2021-09-03T14:20:09.668Z",
+          "__v": 0
+        },
+        {
+          "_id": "613222f19553781a8ca8d0e08",
+          "user": "6131dc5e3e4037cd4734a066",
+          "title": "My Title",
+          "description": "Please wake up early",
+          "tag": "personal",
+          "date": "2021-09-03T14:20:09.668Z",
+          "__v": 0
+        },
+        {
+          "_id": "61322f119553781a8ca8d0e08",
+          "user": "6131dc5e3e4037cd4734a066",
+          "title": "My Title",
+          "description": "Please wake up early",
+          "tag": "personal",
+          "date": "2021-09-03T14:20:09.668Z",
+          "__v": 0
+        },
+      ]
+      const [notes, setNotes] = useState(notesInitial)
 
 
-const NoteState = (props) => {
-
-const notesinitial = [
-    {
-      "_id": "6783d313828663d54a86f6b5",
-      "user": "67830b716631b90fcf3bb786",
-      "title": "football",
-      "description": "ronaldo the goat",
-      "tag": "serioiusness's issue22",
-      "__v": 0
-    },
-    {
-      "_id": "6783f7f28d1a452f129eb93a",
-      "user": "67830b716631b90fcf3bb786",
-      "title": "Routine ",
-      "description": "wake up at 4 am",
-      "tag": "dani for you",
-      "__v": 0
-    },
-    {
-        "_id": "6783f7f28d1a452f129eb93a",
-        "user": "67830b716631b90fcf3bb786",
-        "title": "Routine ",
-        "description": "wake up at 4 am",
-        "tag": "dani for you",
-        "__v": 0
-      },
-      {
-        "_id": "6783f7f28d1a452f129eb93a",
-        "user": "67830b716631b90fcf3bb786",
-        "title": "Routine ",
-        "description": "wake up at 4 am",
-        "tag": "dani for you",
-        "__v": 0
+      // Add a Note
+      const addNote = (title, description, tag)=>{
+        // TODO: API Call
+        console.log("Adding a new note")
+        const note = {
+          "_id": "61322f119553781a8ca8d0e08",
+          "user": "6131dc5e3e4037cd4734a0664",
+          "title": title,
+          "description": description,
+          "tag": tag,
+          "date": "2021-09-03T14:20:09.668Z",
+          "__v": 0
+        };
+        setNotes(notes.concat(note)) 
       }
-  ]
 
-  const [notes, setnotes] = useState(notesinitial)
-//add note
-const addnote = (title,description,tag) => {
-const notes = {
-    "_id": "6783f7f28d1a452f129eb93a",
-    "user": "67830b716631b90fcf3bb786",
-    "title": "Routine ",
-    "description": "wake up at 4 am Addeds",
-    "tag": "dani for you",
-    "__v": 0
-  }
-    setnotes(notes.push(note))
+      // Delete a Note
+      const deleteNote = ()=>{
+
+      }
+      // Edit a Note
+      const editNote = ()=>{
+
+      }
+    
+    return (
+        <NoteContext.Provider value={{notes, addNote,deleteNote, editNote }}>
+            {props.children}
+        </NoteContext.Provider>
+    )
 }
 
-//delte note
-const deletenote = () => {
-
-
-}
-
-//edit note
-const editnote = () => {
-
-
-}
-
-  
-  return (
-    // Use the NoteContext.Provider to pass the state
-    <NoteContext.Provider value={{notes,setnotes}}>
-      {props.children}
-    </NoteContext.Provider>
-  );
-};
-
-export { NoteContext }; // Export the context to use in other components
 export default NoteState;
