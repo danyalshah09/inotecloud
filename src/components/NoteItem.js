@@ -3,7 +3,7 @@ import noteContext from "../context/notes/noteContext";
 
  const Noteitem = (props) => {
     const context = useContext(noteContext);
-    const {deletenote} = context;
+    const {deleteNote} = context;
     const { note } = props;
     return (
         <div className="card d-inline-block flex-row m-3">
@@ -13,7 +13,7 @@ import noteContext from "../context/notes/noteContext";
                     <p className="card-text mb-0">{note.description}</p>
                     <i className="fas fa-pencil-alt mx-3" > Edit</i> 
                     <i className="fas fa-trash mx-3" onClick= {()=>{
-                        deletenote(note._id)
+                        deleteNote(note._id)
                     }}> Delete</i> 
                 </div>
 

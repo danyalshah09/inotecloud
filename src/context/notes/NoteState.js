@@ -1,6 +1,5 @@
 import NoteContext from "./noteContext";
 import { useState } from "react";
-
 const NoteState = (props)=>{
     const notesInitial = [
         {
@@ -87,11 +86,24 @@ const NoteState = (props)=>{
       }
 
       // Delete a Note
-      const deleteNote = ()=>{
-
+      const deleteNote = (id)=>{
+     setNotes(notes.filter(note => note._id !== id))
       }
       // Edit a Note
-      const editNote = ()=>{
+      const editNote = (title,description,tag)=>{
+        for (let index= 0;index<notes.length;index++){
+          const element = notes[index]
+        
+        //logic to edit note
+          if(element.id === id)
+          {
+            element.title  = title
+            element.description  = description
+            element.tag  = tag
+
+          }
+        }
+
 
       }
     
