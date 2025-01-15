@@ -19,7 +19,11 @@ import { Link, useLocation } from 'react-router-dom';
           <li className="nav-item">
             <Link className={`nav-link ${location.pathname === "/about" ? "active" : ""}`} to="/about">About</Link>
           </li>
+
         </ul>
+          <Link type="button" class="btn btn-primary mx-2" to="/login">Login</Link>
+          <Link type="button" class="btn btn-primary"  to="/signup">Signup</Link>
+
       </div>
     </nav>
   );
