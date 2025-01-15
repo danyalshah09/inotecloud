@@ -9,12 +9,14 @@ const NoteState = (props) => {
 
   // Get all notes
   const getNotes = async () => {
+    const authToken = localStorage.getItem("auth-token");
+
     try {
       const response = await fetch(`${host}/api/notes/fetchallnotes`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjc4MzBiNzE2NjMxYjkwZmNmM2JiNzg2In0sImlhdCI6MTczNjg2ODM5NiwiZXhwIjoxNzM2ODcxOTk2fQ.gwpvfeTFGRHuS_xLy7K60pEzI1c7yYthulnlUg6bWJY",
+          "auth-token": authToken
         },
       });
   
@@ -32,11 +34,14 @@ const NoteState = (props) => {
   
   // Add a Note
   const addNote = async (title, description, tag) => {
+    const authToken = localStorage.getItem("auth-token");
+
     const response = await fetch(`${host}/api/notes/addnote`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjc4MzBiNzE2NjMxYjkwZmNmM2JiNzg2In0sImlhdCI6MTczNjg2ODM5NiwiZXhwIjoxNzM2ODcxOTk2fQ.gwpvfeTFGRHuS_xLy7K60pEzI1c7yYthulnlUg6bWJY"   },
+        "auth-token": authToken
+  },
       body: JSON.stringify({ title, description, tag }),
     }); 
 
@@ -46,12 +51,15 @@ const NoteState = (props) => {
 
   // Delete a Note
   const deleteNote = async (id) => {
+
+    const authToken = localStorage.getItem("auth-token");
+
 //API CALL
 const response = await fetch(`${host}/api/notes/deleteNote/${id}`, {
   method: "DELETE",
   headers: {
     "Content-Type": "application/json",
-    "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjc4MzBiNzE2NjMxYjkwZmNmM2JiNzg2In0sImlhdCI6MTczNjg2ODM5NiwiZXhwIjoxNzM2ODcxOTk2fQ.gwpvfeTFGRHuS_xLy7K60pEzI1c7yYthulnlUg6bWJY" },
+    "auth-token": authToken},
   });
     const json = response.json();
   console.log(json)
@@ -65,12 +73,15 @@ setNotes(newNotes);
 
   // Edit a Note
   const editNote = async (id, title, description, tag) => {
+    const authToken = localStorage.getItem("auth-token");
+
     const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjc4MzBiNzE2NjMxYjkwZmNmM2JiNzg2In0sImlhdCI6MTczNjgwNDg4MiwiZXhwIjoxNzM2ODA4NDgyfQ.h3gsdl46GeUPQ0ypxCRORi0xceLEoiCp9WbuQ5_W2PY" },
-      body: JSON.stringify({ title, description, tag }),
+        "auth-token": authToken},
+
+        body: JSON.stringify({ title, description, tag }),
     });
 
     const json = await response.json();

@@ -8,5 +8,4 @@ import Notes from './Notes';
         </div>
     )
 }
-
 export default Home
