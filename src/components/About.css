@@ -1,0 +1,32 @@
+.about-section {
+    margin-top: 50px;
+    padding: 40px;
+    background: #343A40;
+    color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .about-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .about-description {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  
+  .about-features li {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+  
+  .about-image {
+    max-width: 100%;
+    height: auto;
+    border: 3px solid white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }

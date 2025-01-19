@@ -1,9 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import noteContext from "../context/notes/noteContext";
-import NoteItem from "./Noteitem";
+import NoteItem from "./NoteItem";
 import AddNote from "./AddNote";
 
 const Notes = () => {
+  // Simulating a login state for demonstration
+const isLoggedIn = localStorage.getItem("authToken") ? true : false;
+
   const context = useContext(noteContext);
   const { notes, getNotes, editNote } = context;
 
@@ -43,10 +46,10 @@ const Notes = () => {
   };
 
   return (
-    <>
+    <div>
       {/* Modal */}
       <div
-        className="modal fade"
+        className="modal fade "
         id="exampleModal"
         tabIndex="-1"
         aria-labelledby="exampleModalLabel"
@@ -124,13 +127,14 @@ const Notes = () => {
         </div>
       </div>
 
-      {/* Add Note Section */}
-      <AddNote />
+
+      <div className="container d-flex flex-row m-4">
+      <AddNote/>
 
       {/* Notes List */}
-      <div className="container">
-      <div className="row my-3">
-        <h2>Your Notes</h2>
+      <div className="container  background-radial-gradient overflow-hiddenr">
+        <h2 className="text-center text-white my-4" >Reminder</h2>
+      <div className="col my-3">
         <div className="container">
         {notes.map((note) => (
           <NoteItem key={note._id} updateNote={updateNote} note={note} />
@@ -138,7 +142,9 @@ const Notes = () => {
         ))}</div>
         </div>
       </div>
-    </>
+      </div>
+
+    </div>
   );
 };
 

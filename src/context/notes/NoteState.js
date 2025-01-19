@@ -25,6 +25,9 @@ const NoteState = (props) => {
       }
   
       const json = await response.json();
+      console.log("Fetched Notes:", json); // Add this for debugging
+      console.log("Auth Token:", authToken);
+
       setNotes(json);
     } catch (error) {
       console.error("Error fetching notes:", error);

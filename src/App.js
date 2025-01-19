@@ -2,14 +2,21 @@ import "./App.css";
 import {
   BrowserRouter as Router,
   Route,
-  Routes, // Import Routes
+  Routes,
+  Navigate,
 } from "react-router-dom";
-import  Navbar from "./components/Navbar";
-import  Home from "./components/Home";
+import Navbar from "./components/Navbar";
+import Home from "./components/Home";
 import About from "./components/About";
 import NoteState from "./context/notes/NoteState";
 import { Signup } from "./components/Signup";
 import { Login } from "./components/Login";
+
+// Create a ProtectedRoute component
+const ProtectedRoute = ({ element }) => {
+  const isAuthenticated = !!localStorage.getItem("auth-token"); // Check auth token
+  return isAuthenticated ? element : <Navigate to="/login" />;
+};
 
 function App() {
   return (
@@ -19,11 +26,15 @@ function App() {
           <Navbar />
           <div className="container">
             <Routes>
-              <Route exact path="/" element={<Home />} />
+              {/* Protect Home route */}
+              <Route
+                exact
+                path="/"
+                element={<ProtectedRoute element={<Home />} />}
+              />
               <Route exact path="/about" element={<About />} />
               <Route exact path="/login" element={<Login />} />
               <Route exact path="/signup" element={<Signup />} />
-
             </Routes>
           </div>
         </Router>
