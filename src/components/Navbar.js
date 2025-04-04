@@ -13,6 +13,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("auth-token"); // Remove the token
+    localStorage.removeItem("user-name"); // Remove the username
     setIsLoggedIn(false); // Update state
     navigate("/login"); // Redirect to login page
   };
@@ -52,6 +53,8 @@ const Navbar = () => {
               About
             </Link>
           </li>
+
+         
         </ul>
         {!isLoggedIn ? (
           <>

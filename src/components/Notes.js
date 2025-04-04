@@ -4,14 +4,57 @@ import NoteItem from "./NoteItem";
 import AddNote from "./AddNote";
 
 const Notes = () => {
-  // Simulating a login state for demonstration
-const isLoggedIn = localStorage.getItem("authToken") ? true : false;
-
+  // Correctly check for the auth token using the same key used in login
+  const isLoggedIn = localStorage.getItem("auth-token") ? true : false;
+  const [userName, setUserName] = useState("Guest");
+  console.log("User name from localStorage:", localStorage.getItem("user-name"));
+  console.log("DANYAL THE CODER");
   const context = useContext(noteContext);
   const { notes, getNotes, editNote } = context;
 
   useEffect(() => {
-    getNotes();
+    if (isLoggedIn) {
+      getNotes();
+      
+      // Fetch user details from API regardless of localStorage state
+      const fetchUserDetails = async () => {
+        try {
+          const authToken = localStorage.getItem("auth-token");
+          const response = await fetch("http://localhost:5000/api/auth/getuser", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "auth-token": authToken
+            }
+          });
+          
+          if (response.ok) {
+            const userData = await response.json();
+            console.log("User data fetched:", userData);
+            if (userData && userData.name) {
+              localStorage.setItem("user-name", userData.name);
+              setUserName(userData.name);
+            }
+          } else {
+            console.log("Failed to fetch user details, using localStorage");
+            // Try localStorage as fallback
+            const storedName = localStorage.getItem("user-name");
+            if (storedName) {
+              setUserName(storedName);
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching user details:", error);
+          // On error, try localStorage as fallback
+          const storedName = localStorage.getItem("user-name");
+          if (storedName) {
+            setUserName(storedName);
+          }
+        }
+      };
+      
+      fetchUserDetails();
+    }
   }, []);
 
   const [note, setNote] = useState({
@@ -127,26 +170,29 @@ const isLoggedIn = localStorage.getItem("authToken") ? true : false;
         </div>
       </div>
 
-
       <div className="container d-flex flex-row m-4">
-      <AddNote/>
+        <AddNote/>
 
-      {/* Notes List */}
-      <div className="container  background-radial-gradient overflow-hiddenr">
-        <h2 className="text-center text-white my-4" >Reminder</h2>
-      <div className="col my-3">
-        <div className="container">
-        {notes.map((note) => (
-          <NoteItem key={note._id} updateNote={updateNote} note={note} />
-          
-        ))}</div>
+        {/* Notes List */}
+        <div className="container background-radial-gradient overflow-hidden">
+          <h2 className="text-center text-white my-4">
+            Welcome, <span className="fw-bold" style={{ color: "hsl(218, 81%, 75%)" }}>{userName}</span>!
+          </h2>
+          <div className="col my-3">
+            <div className="container">
+              {notes.length > 0 ? (
+                notes.map((note) => (
+                  <NoteItem key={note._id} updateNote={updateNote} note={note} />
+                ))
+              ) : (
+                <p className="text-center text-white">No notes yet. Add your first note!</p>
+              )}
+            </div>
+          </div>
         </div>
       </div>
-      </div>
-
     </div>
   );
 };
-
 
 export default Notes;

@@ -26,6 +26,10 @@ export const Login = () => {
       });
 
       const json = await response.json();
+      console.log("Login response:", json); // Log the entire response
+      console.log("Login response type:", typeof json);
+      console.log("Login response keys:", Object.keys(json));
+      console.log("Name from response:", json.name);
 
       if (response.ok) {
         // Only show success alert if login is successful
@@ -42,6 +46,10 @@ export const Login = () => {
 
         // Store token in localStorage or context
         localStorage.setItem("auth-token", json.authToken);
+        const userName = json.name || "";
+        console.log("Name before storage:", userName, typeof userName);
+        localStorage.setItem("user-name", String(userName));
+        console.log("Storing username in localStorage:", userName);
 
         // Delay the navigation to Home component by 3 seconds
         setTimeout(() => {
