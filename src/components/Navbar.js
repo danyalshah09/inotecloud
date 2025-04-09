@@ -14,6 +14,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("auth-token"); // Remove the token
     localStorage.removeItem("user-name"); // Remove the username
+    localStorage.removeItem("user-id"); // Remove the user ID
     setIsLoggedIn(false); // Update state
     navigate("/login"); // Redirect to login page
   };
@@ -53,8 +54,16 @@ const Navbar = () => {
               About
             </Link>
           </li>
-
-         
+          {isLoggedIn && (
+            <li className="nav-item">
+              <Link
+                className={`nav-link ${location.pathname === "/forum" ? "active" : ""}`}
+                to="/forum"
+              >
+                Forum
+              </Link>
+            </li>
+          )}
         </ul>
         {!isLoggedIn ? (
           <>

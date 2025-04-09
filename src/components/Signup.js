@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Alert } from "./Alert";
+import { useNavigate } from "react-router-dom";
 
 export const Signup = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ export const Signup = () => {
     cpassword: "",
   });
   const [alert, setAlert] = useState({ visible: false, message: "", type: "" });
+  let navigate = useNavigate();
 
   const {name, email, password, cpassword } = formData;
 
@@ -29,24 +31,22 @@ export const Signup = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name,email, password}), // Replace "User Name" with actual user input if needed
+        body: JSON.stringify({ name, email, password }),
       });
 
-      const result = await response.json();
+      const json = await response.json();
+      console.log(json);
 
-      if (response.status === 201) {
-        setAlert({ visible: true, message: "Account created successfully", type: "success" });
+      if (json.success) {
+        localStorage.setItem("auth-token", json.authToken);
+        localStorage.setItem("user-id", json.userId);
+        localStorage.setItem("user-name", json.name);
+        navigate("/");
+      } else {
+        setAlert({ visible: true, message: "Unable to create account!", type: "danger" });
         setTimeout(() => {
           setAlert({ visible: false, message: "", type: "" });
         }, 1000);
-      } else {
-          // If the response is not OK, show error message
-          setAlert({ visible: true, message: "Unable to create account!", type: "danger" });
-
-          // Hide the alert after 1 second
-          setTimeout(() => {
-            setAlert({ visible: false, message: "", type: "" });
-          }, 1000);
       }
     } catch (error) {
       console.error("Error creating user:", error);

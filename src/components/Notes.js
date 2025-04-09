@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import noteContext from "../context/notes/noteContext";
 import NoteItem from "./NoteItem";
 import AddNote from "./AddNote";
+import { toast } from 'react-toastify';
 
 const Notes = () => {
   // Correctly check for the auth token using the same key used in login
@@ -55,13 +56,13 @@ const Notes = () => {
       
       fetchUserDetails();
     }
-  }, []);
+  }, [isLoggedIn, getNotes]);
 
   const [note, setNote] = useState({
     id: "",
     etitle: "",
     edescription: "",
-    etag: "",
+    etag: ""
   });
 
   const updateNote = (currentNote) => {
@@ -71,7 +72,7 @@ const Notes = () => {
       id: currentNote._id,
       etitle: currentNote.title,
       edescription: currentNote.description,
-      etag: currentNote.tag,
+      etag: currentNote.tag
     });
   };
 
@@ -81,8 +82,8 @@ const Notes = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    editNote(note.id, note.etitle, note.edescription, note.etag); // Call editNote with updated details
-
+    editNote(note.id, note.etitle, note.edescription, note.etag);
+    
     // Hide the modal after editing
     const modal = window.bootstrap.Modal.getInstance(document.getElementById("exampleModal"));
     modal.hide();
@@ -170,23 +171,29 @@ const Notes = () => {
         </div>
       </div>
 
-      <div className="container d-flex flex-row m-4">
-        <AddNote/>
+      <div className="container-fluid m-4">
+        <div className="row">
+          <div className="col-md-4">
+            <AddNote/>
+          </div>
 
-        {/* Notes List */}
-        <div className="container background-radial-gradient overflow-hidden">
-          <h2 className="text-center text-white my-4">
-            Welcome, <span className="fw-bold" style={{ color: "hsl(218, 81%, 75%)" }}>{userName}</span>!
-          </h2>
-          <div className="col my-3">
-            <div className="container">
-              {notes.length > 0 ? (
-                notes.map((note) => (
-                  <NoteItem key={note._id} updateNote={updateNote} note={note} />
-                ))
-              ) : (
-                <p className="text-center text-white">No notes yet. Add your first note!</p>
-              )}
+          {/* Notes List */}
+          <div className="col-md-8">
+            <div className="background-radial-gradient overflow-hidden rounded p-4">
+              <h2 className="text-center text-white my-4">
+                Welcome, <span className="fw-bold" style={{ color: "hsl(218, 81%, 75%)" }}>{userName}</span>!
+              </h2>
+              <div className="row my-3">
+                {notes.length > 0 ? (
+                  notes.map((note) => (
+                    <NoteItem key={note._id} updateNote={updateNote} note={note} />
+                  ))
+                ) : (
+                  <div className="col-12">
+                    <p className="text-center text-white">No notes yet. Add your first note!</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

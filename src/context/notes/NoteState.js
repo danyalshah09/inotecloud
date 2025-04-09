@@ -44,7 +44,7 @@ const NoteState = (props) => {
       headers: {
         "Content-Type": "application/json",
         "auth-token": authToken
-  },
+      },
       body: JSON.stringify({ title, description, tag }),
     }); 
 
@@ -54,24 +54,20 @@ const NoteState = (props) => {
 
   // Delete a Note
   const deleteNote = async (id) => {
-
     const authToken = localStorage.getItem("auth-token");
 
-//API CALL
-const response = await fetch(`${host}/api/notes/deleteNote/${id}`, {
-  method: "DELETE",
-  headers: {
-    "Content-Type": "application/json",
-    "auth-token": authToken},
-  });
-    const json = response.json();
-  console.log(json)
-
-
-    console.log("Delet ing the node with id" + id)
+    //API CALL
+    await fetch(`${host}/api/notes/deleteNote/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": authToken
+      },
+    });
+    
+    console.log("Deleting the node with id" + id)
     const newNotes = notes.filter((note) => note._id !== id);
-setNotes(newNotes);
-
+    setNotes(newNotes);
   };
 
   // Edit a Note
@@ -82,9 +78,9 @@ setNotes(newNotes);
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": authToken},
-
-        body: JSON.stringify({ title, description, tag }),
+        "auth-token": authToken
+      },
+      body: JSON.stringify({ title, description, tag }),
     });
 
     const json = await response.json();

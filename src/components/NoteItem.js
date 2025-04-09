@@ -1,39 +1,40 @@
-
 import React, { useContext } from "react";
 import noteContext from "../context/notes/noteContext";
 
-const Noteitem = (props) => {
+const NoteItem = (props) => {
   const context = useContext(noteContext);
   const { deleteNote } = context;
   const { note, updateNote } = props;
 
   return (
-    <div className="card d-inline-block flex-row m-3">
-      <div className="p-3">
-        <div className="card-body flex-grow-1">
-          <h5 className="card-title mb-1 text-red">{note.title}</h5>
-          <p className="card-text mb-0">{note.description}</p>
-          <i
-            className="fas fa-pencil-alt mx-3"
-            onClick={() => {
-              updateNote(note);
-            }}
-          >
-            
-          </i>
-          <i
-            className="fas fa-trash mx-3"
-            onClick={() => {
-              deleteNote(note._id);
-            }}
-            style={{ cursor: "pointer" }}
-          >
-            
-          </i>
+    <div className="col-md-6 mb-4">
+      <div className="card shadow-sm h-100">
+        <div className="card-body">
+          <div className="d-flex align-items-center justify-content-between mb-2">
+            <h5 className="card-title">{note.title}</h5>
+            <span className="badge bg-light text-dark">{note.tag}</span>
+          </div>
+          <p className="card-text">{note.description}</p>
+          <div className="d-flex justify-content-end mt-3">
+            <i
+              className="far fa-edit mx-2 text-primary"
+              style={{ cursor: "pointer", fontSize: "1.2rem" }}
+              onClick={() => {
+                updateNote(note);
+              }}
+            ></i>
+            <i
+              className="far fa-trash-alt mx-2 text-danger"
+              style={{ cursor: "pointer", fontSize: "1.2rem" }}
+              onClick={() => {
+                deleteNote(note._id);
+              }}
+            ></i>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default Noteitem;
+export default NoteItem;

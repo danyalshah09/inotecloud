@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Alert } from "./Alert";
+import { toast } from 'react-toastify';
+import { parseToken } from "../utils/tokenHelper";
 
-export const Login = () => {
+export const Login = ({ setAlertMessage }) => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [alert, setAlert] = useState({ visible: false, message: "", type: "" });
 
   const navigate = useNavigate(); // Hook for navigation
@@ -16,6 +19,18 @@ export const Login = () => {
     e.preventDefault();
     const { email, password } = credentials;
 
+    if (!email.trim() || !password.trim()) {
+      setAlert({
+        visible: true,
+        message: "Please enter both email and password",
+        type: "danger",
+      });
+      setTimeout(() => setAlert({ visible: false, message: "", type: "" }), 3000);
+      return;
+    }
+
+    setIsSubmitting(true);
+
     try {
       const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
@@ -26,60 +41,60 @@ export const Login = () => {
       });
 
       const json = await response.json();
-      console.log("Login response:", json); // Log the entire response
-      console.log("Login response type:", typeof json);
-      console.log("Login response keys:", Object.keys(json));
-      console.log("Name from response:", json.name);
+      console.log("Login response:", json); 
 
       if (response.ok) {
-        // Only show success alert if login is successful
+        // Store token in localStorage
+        localStorage.setItem("auth-token", json.authToken);
+        
+        // Store username
+        const userName = json.name || "";
+        localStorage.setItem("user-name", String(userName));
+        
+        // Parse token and store user ID
+        const parsedToken = parseToken(json.authToken);
+        if (parsedToken && parsedToken.user && parsedToken.user.id) {
+          localStorage.setItem("user-id", parsedToken.user.id);
+          console.log("Stored user ID:", parsedToken.user.id);
+        }
+        
+        // Set success messages
         setAlert({
           visible: true,
-          message: "Login successful!",
+          message: `Welcome back, ${userName}!`,
           type: "success",
         });
+        
+        if (setAlertMessage) {
+          setAlertMessage(`Welcome back, ${userName}!`);
+        }
+        
+        toast.success("Login successful! Redirecting to home page...");
 
-        // Hide the alert after 1 second
-        setTimeout(() => {
-          setAlert({ visible: false, message: "", type: "" });
-        }, 1000);
-
-        // Store token in localStorage or context
-        localStorage.setItem("auth-token", json.authToken);
-        const userName = json.name || "";
-        console.log("Name before storage:", userName, typeof userName);
-        localStorage.setItem("user-name", String(userName));
-        console.log("Storing username in localStorage:", userName);
-
-        // Delay the navigation to Home component by 3 seconds
+        // Navigate to home after a short delay
         setTimeout(() => {
           navigate("/");
-        }, 3000); // 3 seconds
+        }, 1500);
       } else {
-        // If the response is not OK, show error message
+        // Handle error response
+        const errorMessage = json.error || "Invalid credentials!";
         setAlert({
           visible: true,
-          message: "Invalid credentials!",
+          message: errorMessage,
           type: "danger",
         });
-
-        // Hide the alert after 1 second
-        setTimeout(() => {
-          setAlert({ visible: false, message: "", type: "" });
-        }, 1000);
+        toast.error(errorMessage);
       }
     } catch (error) {
       console.error("Error during login:", error);
       setAlert({
         visible: true,
-        message: "An error occurred. Please try again later.",
+        message: "Server connection error. Please try again later.",
         type: "danger",
       });
-
-      // Hide the alert after 1 second
-      setTimeout(() => {
-        setAlert({ visible: false, message: "", type: "" });
-      }, 1000);
+      toast.error("Unable to connect to the server. Please check your internet connection.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -130,6 +145,8 @@ export const Login = () => {
                         className="form-control"
                         value={credentials.email}
                         onChange={handleChange}
+                        disabled={isSubmitting}
+                        required
                       />
                       <label className="form-label" htmlFor="email">
                         Email address
@@ -143,6 +160,8 @@ export const Login = () => {
                         className="form-control"
                         value={credentials.password}
                         onChange={handleChange}
+                        disabled={isSubmitting}
+                        required
                       />
                       <label className="form-label" htmlFor="password">
                         Password
@@ -152,38 +171,22 @@ export const Login = () => {
                     <button
                       type="submit"
                       className="btn btn-primary btn-block mb-4"
+                      disabled={isSubmitting}
                     >
-                      Sign in
+                      {isSubmitting ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                          Signing in...
+                        </>
+                      ) : (
+                        "Sign in"
+                      )}
                     </button>
 
                     <div className="text-center">
-                      <button
-                        type="button"
-                        className="btn btn-link btn-floating mx-1"
-                      >
-                        <i className="fab fa-facebook-f"></i>
-                      </button>
-
-                      <button
-                        type="button"
-                        className="btn btn-link btn-floating mx-1"
-                      >
-                        <i className="fab fa-google"></i>
-                      </button>
-
-                      <button
-                        type="button"
-                        className="btn btn-link btn-floating mx-1"
-                      >
-                        <i className="fab fa-twitter"></i>
-                      </button>
-
-                      <button
-                        type="button"
-                        className="btn btn-link btn-floating mx-1"
-                      >
-                        <i className="fab fa-github"></i>
-                      </button>
+                      <p>
+                        Don't have an account? <a href="/signup">Sign up</a>
+                      </p>
                     </div>
                   </form>
                 </div>
