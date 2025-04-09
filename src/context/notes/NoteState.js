@@ -1,4 +1,4 @@
-import noteContext from "./noteContext.js";
+import noteContext from "./noteContext";
 import { useState } from "react";
 
 const NoteState = (props) => {
