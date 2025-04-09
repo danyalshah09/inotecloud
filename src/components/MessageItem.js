@@ -168,10 +168,11 @@ const MessageItem = ({ message, updateMessage }) => {
               value={editContent}
               onChange={(e) => setEditContent(e.target.value)}
               disabled={isSubmitting}
+              rows="3"
             />
-            <div className="mt-2">
+            <div className="mt-2 d-flex flex-wrap gap-2">
               <button
-                className="btn btn-primary btn-sm me-2"
+                className="btn btn-primary btn-sm"
                 onClick={handleEdit}
                 disabled={isSubmitting}
               >
@@ -188,8 +189,8 @@ const MessageItem = ({ message, updateMessage }) => {
           </div>
         ) : (
           <>
-            <div className="d-flex justify-content-between align-items-center mb-2">
-              <h5 className="card-title">{message.userName}</h5>
+            <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-2">
+              <h5 className="card-title mb-1 mb-md-0">{message.userName}</h5>
               <small className="text-muted">
                 {formatDate(message.date)}
               </small>
@@ -198,10 +199,10 @@ const MessageItem = ({ message, updateMessage }) => {
           </>
         )}
 
-        <div className="d-flex">
+        <div className="d-flex flex-wrap gap-2">
           {hasLiked ? (
             <button
-              className="btn btn-primary btn-sm me-2"
+              className="btn btn-primary btn-sm"
               onClick={handleLikeToggle}
               disabled={likeInProgress}
             >
@@ -209,7 +210,7 @@ const MessageItem = ({ message, updateMessage }) => {
             </button>
           ) : (
             <button
-              className="btn btn-outline-primary btn-sm me-2"
+              className="btn btn-outline-primary btn-sm"
               onClick={handleLikeToggle}
               disabled={likeInProgress}
             >
@@ -217,7 +218,7 @@ const MessageItem = ({ message, updateMessage }) => {
             </button>
           )}
           <button
-            className="btn btn-outline-secondary btn-sm me-2"
+            className="btn btn-outline-secondary btn-sm"
             onClick={toggleReplies}
           >
             <i className={`fas fa-chevron-${showReplies ? "up" : "down"}`}></i>{" "}
@@ -227,7 +228,7 @@ const MessageItem = ({ message, updateMessage }) => {
           {isCurrentUserMessage() && (
             <>
               <button
-                className="btn btn-outline-info btn-sm me-2"
+                className="btn btn-outline-info btn-sm"
                 onClick={toggleEditMode}
               >
                 <i className="fas fa-edit"></i> Edit
@@ -248,18 +249,18 @@ const MessageItem = ({ message, updateMessage }) => {
               <div className="list-group">
                 {message.replies.map((reply, index) => (
                   <div key={index} className="list-group-item list-group-item-action">
-                    <div className="d-flex justify-content-between">
+                    <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-1">
                       <h6 className="mb-1">{reply.userName}</h6>
-                      <small>{formatDate(reply.date)}</small>
+                      <small className="text-muted">{formatDate(reply.date)}</small>
                     </div>
-                    <p className="mb-1">{reply.content}</p>
+                    <p className="mb-0">{reply.content}</p>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-muted">No replies yet.</p>
+              <p className="text-muted mb-3">No replies yet.</p>
             )}
-
+            
             <form onSubmit={handleAddReply} className="mt-3">
               <div className="input-group">
                 <input
@@ -269,14 +270,17 @@ const MessageItem = ({ message, updateMessage }) => {
                   value={replyContent}
                   onChange={(e) => setReplyContent(e.target.value)}
                   disabled={isSubmitting}
-                  required
                 />
                 <button
-                  className="btn btn-primary" 
+                  className="btn btn-primary"
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !replyContent.trim()}
                 >
-                  {isSubmitting ? "Sending..." : "Reply"}
+                  {isSubmitting ? (
+                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  ) : (
+                    "Reply"
+                  )}
                 </button>
               </div>
             </form>

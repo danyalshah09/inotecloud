@@ -79,10 +79,8 @@ const Forum = () => {
   // Conditional rendering to prevent flickering
   if (loading && messages.length === 0) {
     return (
-      <div className="container mt-5 text-center">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
+      <div className="container mt-4 text-center">
+        <div className="spinner" role="status"></div>
         <p className="mt-2">Loading forum...</p>
       </div>
     );
@@ -90,7 +88,7 @@ const Forum = () => {
 
   if (error) {
     return (
-      <div className="container mt-5">
+      <div className="container mt-4">
         <div className="alert alert-danger" role="alert">
           {error}
           <button 
@@ -105,28 +103,28 @@ const Forum = () => {
   }
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-3">
       <div className="row">
-        <div className="col-md-8 offset-md-2">
-          <div className="text-center mb-4">
-            <h2 className="display-4 fw-bold">
+        <div className="col-12 col-md-8 offset-md-2">
+          <div className="text-center mb-3">
+            <h2 className="h3 fw-bold mb-2">
               <span style={{ color: "hsl(218, 81%, 75%)" }}>Discussion Forum</span>
             </h2>
-            <p className="lead mb-4 text-muted">
+            <p className="mb-3 text-muted">
               Welcome, <span className="fw-bold" style={{ color: "hsl(218, 81%, 55%)" }}>{userName}</span>! 
               Join the conversation and share your thoughts.
             </p>
-            <div className="border-bottom pb-2 mb-4" style={{ borderColor: "hsl(218, 81%, 85%)" }}></div>
+            <div className="border-bottom pb-2 mb-3" style={{ borderColor: "hsl(218, 81%, 85%)" }}></div>
           </div>
 
           {isLoggedIn ? (
             <>
               <AddMessage />
-              <div className="d-flex align-items-center mb-3 mt-5">
-                <h4 className="mb-0">Recent Discussions</h4>
-                <div className="flex-grow-1 ms-3 border-bottom" style={{ borderColor: "hsl(218, 81%, 85%)" }}></div>
+              <div className="d-flex flex-column flex-md-row align-items-center mb-3 mt-4">
+                <h4 className="h5 mb-2 mb-md-0">Recent Discussions</h4>
+                <div className="flex-grow-1 ms-md-3 border-bottom d-none d-md-block" style={{ borderColor: "hsl(218, 81%, 85%)" }}></div>
                 <button 
-                  className="btn btn-sm btn-outline-primary ms-2" 
+                  className="btn btn-sm btn-outline-primary ms-md-2 mt-2 mt-md-0"
                   onClick={handleRefresh}
                   disabled={loading}
                 >

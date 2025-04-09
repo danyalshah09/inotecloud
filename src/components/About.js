@@ -10,7 +10,7 @@ const About = () => {
           <img 
             src="notes.jpg" 
             alt="About Notes App" 
-            className="img-fluid about-image rounded"
+            className="img-fluid about-image"
           />
         </div>
         

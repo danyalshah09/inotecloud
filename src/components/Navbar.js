@@ -1,84 +1,84 @@
-import React, { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
-  const location = useLocation(); // Get the current location
-  const navigate = useNavigate(); // For redirection
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const authToken = localStorage.getItem('auth-token');
+  const userName = localStorage.getItem('user-name');
 
-  useEffect(() => {
-    // Check login status on component mount or location change
-    setIsLoggedIn(!!localStorage.getItem("auth-token"));
-  }, [location]); // Re-run when location changes
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   const handleLogout = () => {
-    localStorage.removeItem("auth-token"); // Remove the token
-    localStorage.removeItem("user-name"); // Remove the username
-    localStorage.removeItem("user-id"); // Remove the user ID
-    setIsLoggedIn(false); // Update state
-    navigate("/login"); // Redirect to login page
+    localStorage.removeItem('auth-token');
+    localStorage.removeItem('user-name');
+    localStorage.removeItem('user-id');
+    navigate('/login');
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <Link className="navbar-brand text-white" to="/">
-        iNoteCloud
-      </Link>
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon"></span>
-      </button>
+    <nav className="navbar navbar-expand-md navbar-light bg-light">
+      <div className="container">
+        <Link className="navbar-brand" to="/">
+          <span style={{ color: "hsl(218, 81%, 75%)" }}>iNoteCloud</span>
+        </Link>
+        
+        <button
+          className="navbar-toggler"
+          type="button"
+          onClick={toggleMenu}
+          aria-expanded={isMenuOpen}
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
 
-      <div className="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <Link
-              className={`nav-link ${location.pathname === "/" ? "active" : ""}`}
-              to="/"
-            >
-              Home
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link
-              className={`nav-link ${location.pathname === "/about" ? "active" : ""}`}
-              to="/about"
-            >
-              About
-            </Link>
-          </li>
-          {isLoggedIn && (
-            <li className="nav-item">
-              <Link
-                className={`nav-link ${location.pathname === "/forum" ? "active" : ""}`}
-                to="/forum"
-              >
-                Forum
-              </Link>
-            </li>
-          )}
-        </ul>
-        {!isLoggedIn ? (
-          <>
-            <Link type="button" className="btn btn-primary mx-2" to="/login">
-              Login
-            </Link>
-            <Link type="button" className="btn btn-primary" to="/signup">
-              Signup
-            </Link>
-          </>
-        ) : (
-          <button className="btn btn-primary" onClick={handleLogout}>
-            Logout
-          </button>
-        )}
+        <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}>
+          <ul className="navbar-nav ms-auto">
+            {authToken ? (
+              <>
+                <li className="nav-item">
+                  <span className="nav-link">
+                    Welcome, <span className="fw-bold" style={{ color: "hsl(218, 81%, 55%)" }}>{userName}</span>
+                  </span>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/" onClick={() => setIsMenuOpen(false)}>
+                    Home
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/forum" onClick={() => setIsMenuOpen(false)}>
+                    Forum
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <button
+                    className="btn btn-outline-danger btn-sm ms-2 mt-2 mt-md-0"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/login" onClick={() => setIsMenuOpen(false)}>
+                    Login
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/signup" onClick={() => setIsMenuOpen(false)}>
+                    Signup
+                  </Link>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
       </div>
     </nav>
   );

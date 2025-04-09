@@ -55,20 +55,20 @@ const AddMessage = () => {
   };
 
   return (
-    <div className="card mb-4">
-      <div className="card-header bg-primary text-white">
-        <h5 className="mb-0">Start a New Discussion</h5>
+    <div className="card mb-3">
+      <div className="card-header bg-primary text-white py-2">
+        <h5 className="mb-0 h6">Start a New Discussion</h5>
       </div>
-      <div className="card-body">
+      <div className="card-body p-3">
         {error && (
-          <div className="alert alert-danger" role="alert">
+          <div className="alert alert-danger mb-3" role="alert">
             <i className="fas fa-exclamation-triangle me-2"></i>
             {error}
           </div>
         )}
         
         {successMessage && (
-          <div className="alert alert-success" role="alert">
+          <div className="alert alert-success mb-3" role="alert">
             <i className="fas fa-check-circle me-2"></i>
             {successMessage}
           </div>
@@ -86,20 +86,22 @@ const AddMessage = () => {
               required
             ></textarea>
           </div>
-          <button 
-            type="submit" 
-            className="btn btn-primary"
-            disabled={isSubmitting || content.trim() === ""}
-          >
-            {isSubmitting ? (
-              <>
-                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                Posting...
-              </>
-            ) : (
-              "Post Message"
-            )}
-          </button>
+          <div className="d-grid">
+            <button 
+              type="submit" 
+              className="btn btn-primary"
+              disabled={isSubmitting || content.trim() === ""}
+            >
+              {isSubmitting ? (
+                <>
+                  <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  Posting...
+                </>
+              ) : (
+                "Post Message"
+              )}
+            </button>
+          </div>
         </form>
       </div>
     </div>

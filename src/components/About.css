@@ -24,9 +24,42 @@
     margin-bottom: 10px;
   }
   
+  .img-container {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  
   .about-image {
     max-width: 100%;
     height: auto;
     border: 3px solid white;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+  }
+  
+  @media (max-width: 767.98px) {
+    .about-section {
+      margin-top: 30px;
+      padding: 20px;
+    }
+  
+    .about-title {
+      font-size: 2rem;
+      margin-top: 20px;
+    }
+  
+    .about-description {
+      font-size: 1rem;
+    }
+  
+    .about-features li {
+      font-size: 1rem;
+    }
+  
+    .img-container {
+      max-width: 300px;
+      margin: 0 auto;
+    }
   }

@@ -54,84 +54,120 @@ export const Signup = () => {
   };
 
   return (
-    <>  {alert.visible && <Alert message={alert.message} type={alert.type} />}
-  
-  <section className="w-100 background-radial-gradient overflow-hidden">
-  <div className="container-fluid h-100 px-4 py-5 px-md-5 text-center text-lg-start my-5">
-    <div className="row gx-lg-5 align-items-center mb-5 h-100">
-   
+    <>
+      {alert.visible && <Alert message={alert.message} type={alert.type} />}
+      <div className="auth-container">
+        <div className="auth-content">
+          <div className="row gx-lg-5 align-items-center">
+            <div className="col-lg-6 mb-5 mb-lg-0" style={{ zIndex: 10 }}>
+              <h1
+                className="my-5 display-5 fw-bold ls-tight"
+                style={{ color: "hsl(218, 81%, 95%)" }}
+              >
+                Never Forget What's Important –
+                <br />
+                <span style={{ color: "hsl(218, 81%, 75%)" }}>
+                  Your Notes, Always in Reach.
+                </span>
+              </h1>
+              <p
+                className="mb-4 opacity-70"
+                style={{ color: "hsl(218, 81%, 85%)" }}
+              >
+                Streamline your workflow with our cutting-edge notes app.
+                Securely organize, access, and manage your notes
+                effortlessly—designed to boost productivity and drive success.
+              </p>
+            </div>
 
-      <div className="col-lg-6 mb-5 mb-lg-0 position-relative h-100">
-        <div id="radius-shape-2" className="position-absolute shadow-5-strong"></div>
+            <div className="col-lg-6 mb-5 mb-lg-0 position-relative">
+              <div
+                id="radius-shape-1"
+                className="position-absolute rounded-circle shadow-5-strong"
+              ></div>
+              <div
+                id="radius-shape-2"
+                className="position-absolute shadow-5-strong"
+              ></div>
 
-        <div className="z- card bg-glass h-100">
-          <div className="card-body px-4 py-5 px-md-5">
-            <form className="container my-4" onSubmit={handleSubmit}>
-              <div className="form-outline mb-4">
-                <input
-                  type="name"
-                  id="name"
-                  className="form-control"
-                  value={name}
-                  onChange={handleChange}
-                  required
-                />
-                <label className="form-label" htmlFor="name">Name</label>
+              <div className="card bg-glass">
+                <div className="card-body px-4 py-5 px-md-5">
+                  <form onSubmit={handleSubmit}>
+                    <div className="form-outline mb-4">
+                      <input
+                        type="text"
+                        id="name"
+                        className="form-control"
+                        value={name}
+                        onChange={handleChange}
+                        required
+                      />
+                      <label className="form-label" htmlFor="name">
+                        Name
+                      </label>
+                    </div>
+
+                    <div className="form-outline mb-4">
+                      <input
+                        type="email"
+                        id="email"
+                        className="form-control"
+                        value={email}
+                        onChange={handleChange}
+                        required
+                      />
+                      <label className="form-label" htmlFor="email">
+                        Email address
+                      </label>
+                    </div>
+
+                    <div className="form-outline mb-4">
+                      <input
+                        type="password"
+                        id="password"
+                        className="form-control"
+                        value={password}
+                        onChange={handleChange}
+                        required
+                      />
+                      <label className="form-label" htmlFor="password">
+                        Password
+                      </label>
+                    </div>
+
+                    <div className="form-outline mb-4">
+                      <input
+                        type="password"
+                        id="cpassword"
+                        className="form-control"
+                        value={cpassword}
+                        onChange={handleChange}
+                        required
+                      />
+                      <label className="form-label" htmlFor="cpassword">
+                        Confirm Password
+                      </label>
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="btn btn-primary btn-block mb-4"
+                    >
+                      Sign Up
+                    </button>
+
+                    <div className="text-center">
+                      <p>
+                        Already have an account? <a href="/login">Login</a>
+                      </p>
+                    </div>
+                  </form>
+                </div>
               </div>
-              <div className="form-outline mb-4">
-                <input
-                  type="email"
-                  id="email"
-                  className="form-control"
-                  value={email}
-                  onChange={handleChange}
-                  required
-                />
-                <label className="form-label" htmlFor="email">Email address</label>
-              </div>
-              <div className="form-outline mb-4">
-                <input
-                  type="password"
-                  id="password"
-                  className="form-control"
-                  value={password}
-                  onChange={handleChange}
-                  required
-                />
-                <label className="form-label" htmlFor="password">Password</label>
-              </div>
-              <div className="form-outline mb-4">
-                <input
-                  type="password"
-                  id="cpassword"
-                  className="form-control"
-                  value={cpassword}
-                  onChange={handleChange}
-                  required
-                />
-                <label className="form-label" htmlFor="cpassword">Confirm Password</label>
-              </div>
-              <button type="submit" className="btn btn-primary btn-block mb-4">Sign Up</button>
-            </form>
+            </div>
           </div>
         </div>
       </div>
-
-      <div className="col-lg-6 mb-5 mb-lg-0" style={{ zIndex: 10 }}>
-        
-  
-        <p className="mb-4 opacity-70" style={{ color: "hsl(218, 81%, 85%)" }}>
-          Streamline your workflow with our cutting-edge notes app. Securely organize, access, and manage your notes effortlessly—designed to boost productivity and drive success.
-        </p>
-        <div id="radius-shape-1" className="position-absolute rounded-circle shadow-5-strong"></div>
-
-      </div>
-      
-    </div>
-  </div>
-</section>
-
-
     </>
   );
 };

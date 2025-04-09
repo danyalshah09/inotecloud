@@ -62,9 +62,9 @@ function App() {
           <Router>
             <SessionChecker />
             <Navbar />
-            <Alert message={alertMessage} />
-            <ToastContainer position="top-right" />
-            <div className="container">
+            <main>
+              <Alert message={alertMessage} />
+              <ToastContainer position="top-right" />
               <Routes>
                 <Route exact path="/" element={<Home />} />
                 <Route exact path="/about" element={<About />} />
@@ -72,7 +72,7 @@ function App() {
                 <Route exact path="/signup" element={<Signup setAlertMessage={setAlertMessage} />} />
                 <Route exact path="/forum" element={<Forum />} />
               </Routes>
-            </div>
+            </main>
           </Router>
         </MessageState>
       </NoteState>
