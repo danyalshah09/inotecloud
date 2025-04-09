@@ -97,40 +97,23 @@ export const Login = ({ setAlertMessage }) => {
         <div className="auth-content">
           <div className="row gx-lg-5 align-items-center">
             <div className="col-lg-6 mb-5 mb-lg-0" style={{ zIndex: 10 }}>
-              <h1
-                className="my-5 display-5 fw-bold ls-tight"
-                style={{ color: "hsl(218, 81%, 95%)" }}
-              >
-                Never Forget What's Important –
-                <br />
-                <span style={{ color: "hsl(218, 81%, 75%)" }}>
-                  Your Notes, Always in Reach.
-                </span>
+              <h1 className="my-5 display-5 fw-bold ls-tight">
+                <span className="text-primary">iNoteCloud</span>
               </h1>
-              <p
-                className="mb-4 opacity-70"
-                style={{ color: "hsl(218, 81%, 85%)" }}
-              >
-                Streamline your workflow with our cutting-edge notes app.
-                Securely organize, access, and manage your notes
-                effortlessly—designed to boost productivity and drive success.
+              <h2 className="mb-4">Login</h2>
+              <p className="mb-4 opacity-70">
+                Welcome back! Please enter your credentials to access your notes.
               </p>
             </div>
 
             <div className="col-lg-6 mb-5 mb-lg-0 position-relative">
-              <div
-                id="radius-shape-1"
-                className="position-absolute rounded-circle shadow-5-strong"
-              ></div>
-              <div
-                id="radius-shape-2"
-                className="position-absolute shadow-5-strong"
-              ></div>
-
               <div className="card bg-glass">
                 <div className="card-body px-4 py-5 px-md-5">
                   <form onSubmit={handleSubmit}>
                     <div className="form-outline mb-4">
+                      <label className="form-label" htmlFor="email">
+                        Email address
+                      </label>
                       <input
                         type="email"
                         id="email"
@@ -139,12 +122,12 @@ export const Login = ({ setAlertMessage }) => {
                         onChange={handleChange}
                         required
                       />
-                      <label className="form-label" htmlFor="email">
-                        Email address
-                      </label>
                     </div>
 
                     <div className="form-outline mb-4">
+                      <label className="form-label" htmlFor="password">
+                        Password
+                      </label>
                       <input
                         type="password"
                         id="password"
@@ -153,29 +136,22 @@ export const Login = ({ setAlertMessage }) => {
                         onChange={handleChange}
                         required
                       />
-                      <label className="form-label" htmlFor="password">
-                        Password
-                      </label>
                     </div>
 
                     <button
                       type="submit"
-                      className="btn btn-primary btn-block mb-4"
+                      className="btn btn-primary btn-block mb-4 w-100"
                       disabled={isSubmitting}
                     >
-                      {isSubmitting ? (
-                        <>
-                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                          Signing in...
-                        </>
-                      ) : (
-                        "Sign in"
-                      )}
+                      {isSubmitting ? "Signing in..." : "Sign in"}
                     </button>
 
                     <div className="text-center">
                       <p>
-                        Don't have an account? <a href="/signup">Sign up</a>
+                        Don't have an account?{" "}
+                        <a href="/signup" className="text-primary">
+                          Sign up
+                        </a>
                       </p>
                     </div>
                   </form>
