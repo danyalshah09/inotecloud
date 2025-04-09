@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import NoteContext from "../context/notes/NoteContext";
 import NoteItem from "./NoteItem";
-import AddNote from "./AddNote";
+import AddNote from "./AddNote.js";
 import { toast } from 'react-toastify';
 
 const Notes = () => {
