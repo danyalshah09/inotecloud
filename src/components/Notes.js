@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import NoteContext from "../context/notes/NoteContext";
+import noteContext from "../context/notes/noteContext";
 import NoteItem from "./NoteItem";
 import AddNote from "./AddNote.js";
 import { toast } from 'react-toastify';
@@ -10,7 +10,7 @@ const Notes = () => {
   const [userName, setUserName] = useState("Guest");
   console.log("User name from localStorage:", localStorage.getItem("user-name"));
   console.log("DANYAL THE CODER");
-  const context = useContext(NoteContext);
+  const context = useContext(noteContext);
   const { notes, getNotes, editNote } = context;
 
   useEffect(() => {
