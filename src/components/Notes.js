@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import noteContext from "../context/notes/noteContext";
+import NoteContext from "../context/notes/NoteContext";
 import NoteItem from "./NoteItem";
-import AddNote from "./AddNote";
+import AddNote from "./Addnote";
 
 const Notes = () => {
   // Correctly check for the auth token using the same key used in login
@@ -9,7 +9,7 @@ const Notes = () => {
   const [userName, setUserName] = useState("Guest");
   console.log("User name from localStorage:", localStorage.getItem("user-name"));
   console.log("DANYAL THE CODER");
-  const context = useContext(noteContext);
+  const context = useContext(NoteContext);
   const { notes, getNotes, editNote } = context;
 
   useEffect(() => {
