@@ -11,6 +11,7 @@ import About from "./components/About";
 import NoteState from "./context/notes/NoteState";
 import { Signup } from "./components/Signup";
 import { Login } from "./components/Login";
+import Forum from "./components/Forum";
 
 // Create a ProtectedRoute component
 const ProtectedRoute = ({ element }) => {
@@ -35,6 +36,7 @@ function App() {
               <Route exact path="/about" element={<About />} />
               <Route exact path="/login" element={<Login />} />
               <Route exact path="/signup" element={<Signup />} />
+              <Route exact path="/forum" element={<ProtectedRoute element={<Forum />} />} />
             </Routes>
           </div>
         </Router>

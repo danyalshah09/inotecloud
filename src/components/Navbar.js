@@ -53,8 +53,16 @@ const Navbar = () => {
               About
             </Link>
           </li>
-
-         
+          {isLoggedIn && (
+            <li className="nav-item">
+              <Link
+                className={`nav-link ${location.pathname === "/forum" ? "active" : ""}`}
+                to="/forum"
+              >
+                Forum
+              </Link>
+            </li>
+          )}
         </ul>
         {!isLoggedIn ? (
           <>
