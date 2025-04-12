@@ -3,7 +3,7 @@ import NoteContext from "./NoteContext";
 import { useState } from "react";
 
 const NoteState = (props) => {
-  const host = process.env.REACT_APP_API_URL || "http://localhost:5000";
+  const host = process.env.REACT_APP_API_URL || "http://localhost:3001";
   const notesInitial = [];
   const [notes, setNotes] = useState(notesInitial);
 
@@ -36,19 +36,34 @@ const NoteState = (props) => {
    
   // Add a Note
   const addNote = async (title, description, tag) => {
-    const authToken = localStorage.getItem("auth-token");
+    try {
+      console.log("Adding note with data:", { title, description, tag });
+      const authToken = localStorage.getItem("auth-token");
+      console.log("Auth token:", authToken ? "Present" : "Missing");
 
-    const response = await fetch(`${host}/api/notes/addnote`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": authToken
-      },
-      body: JSON.stringify({ title, description, tag }),
-    });
+      const response = await fetch(`${host}/api/notes/addnote`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": authToken
+        },
+        body: JSON.stringify({ title, description, tag }),
+      });
 
-    const newNote = await response.json();
-    setNotes(notes.concat(newNote));
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error adding note:", errorData);
+        throw new Error(`Failed to add note: ${response.status} ${response.statusText}`);
+      }
+
+      const newNote = await response.json();
+      console.log("Note added successfully:", newNote);
+      setNotes(notes.concat(newNote));
+      return newNote;
+    } catch (error) {
+      console.error("Error in addNote function:", error.message);
+      throw error;
+    }
   };
 
   // Delete a Note
@@ -56,7 +71,7 @@ const NoteState = (props) => {
     const authToken = localStorage.getItem("auth-token");
 
     //API CALL
-    await fetch(`${host}/api/notes/deleteNote/${id}`, {
+    await fetch(`${host}/api/notes/deletenote/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -64,7 +79,7 @@ const NoteState = (props) => {
       },
     });
    
-    console.log("Deleting the node with id" + id)
+    console.log("Deleting the note with id " + id);
     const newNotes = notes.filter((note) => note._id !== id);
     setNotes(newNotes);
   };
