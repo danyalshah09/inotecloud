@@ -1,9 +1,10 @@
-import noteContext from "./noteContext";
+import React, { createContext, useReducer } from "react";
+import NoteContext from "./NoteContext";
+import NoteReducer from "./NoteReducer";
 import { useState } from "react";
 
 const NoteState = (props) => {
   const host = "http://localhost:5000";
-
   const notesInitial = [];
   const [notes, setNotes] = useState(notesInitial);
 
@@ -19,11 +20,10 @@ const NoteState = (props) => {
           "auth-token": authToken
         },
       });
-  
+   
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
       const json = await response.json();
       console.log("Fetched Notes:", json); // Add this for debugging
       console.log("Auth Token:", authToken);
@@ -33,8 +33,8 @@ const NoteState = (props) => {
       console.error("Error fetching notes:", error);
     }
   };
-  
-  
+
+   
   // Add a Note
   const addNote = async (title, description, tag) => {
     const authToken = localStorage.getItem("auth-token");
@@ -46,7 +46,7 @@ const NoteState = (props) => {
         "auth-token": authToken
       },
       body: JSON.stringify({ title, description, tag }),
-    }); 
+    });
 
     const json = await response.json();
     setNotes(notes.concat(json));
@@ -64,7 +64,7 @@ const NoteState = (props) => {
         "auth-token": authToken
       },
     });
-    
+   
     console.log("Deleting the node with id" + id)
     const newNotes = notes.filter((note) => note._id !== id);
     setNotes(newNotes);
@@ -84,7 +84,7 @@ const NoteState = (props) => {
     });
 
     const json = await response.json();
-    
+   
     const newNotes = notes.map((note) =>
       note._id === id ? { ...note, title, description, tag } : note
     );
@@ -92,11 +92,11 @@ const NoteState = (props) => {
   };
 
   return (
-    <noteContext.Provider
+    <NoteContext.Provider
       value={{ notes, addNote, deleteNote, editNote, getNotes }}
     >
       {props.children}
-    </noteContext.Provider>
+    </NoteContext.Provider>
   );
 };
 

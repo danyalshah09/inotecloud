@@ -51,6 +51,49 @@ i{
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+/* Improved navbar mobile responsiveness */
+.navbar-collapse {
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link {
+  padding: 0.5rem 1rem;
+  transition: all 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 4px;
+}
+
+.navbar-nav .nav-link.active {
+  font-weight: 600;
+  color: #fff !important;
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 4px;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    padding: 1rem 0;
+  }
+  
+  .navbar-nav {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 0.5rem;
+  }
+  
+  .navbar-nav .nav-link {
+    padding: 0.75rem 0;
+  }
+  
+  .navbar .d-flex {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
 /* Main content styles */
 main {
   margin-top: 56px; /* Height of the navbar */
@@ -111,6 +154,213 @@ main {
 .bg-glass {
   background-color: hsla(0, 0%, 100%, 0.9) !important;
   backdrop-filter: saturate(200%) blur(25px);
+}
+
+/* Common styles for all full-page components */
+.background-radial-gradient {
+  background-color: hsl(218, 41%, 15%);
+  background-image: radial-gradient(650px circle at 0% 0%,
+      hsl(218, 41%, 35%) 15%,
+      hsl(218, 41%, 30%) 35%,
+      hsl(218, 41%, 20%) 75%,
+      hsl(218, 41%, 19%) 80%,
+      transparent 100%),
+    radial-gradient(1250px circle at 100% 100%,
+      hsl(218, 41%, 45%) 15%,
+      hsl(218, 41%, 30%) 35%,
+      hsl(218, 41%, 20%) 75%,
+      hsl(218, 41%, 19%) 80%,
+      transparent 100%);
+}
+
+/* Content positioning to account for fixed navbar */
+.container, .min-vh-100 {
+  padding-top: 80px !important; /* Add top padding to ensure content is visible below navbar */
+}
+
+/* Notes styles */
+.notes-container {
+  margin-bottom: 3rem;
+}
+
+.note-item {
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.note-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.note-item .card-title {
+  font-weight: 600;
+  color: #333;
+}
+
+.note-item .card-text {
+  color: #555;
+  line-height: 1.5;
+}
+
+.note-item .badge {
+  font-weight: 500;
+  font-size: 0.75rem;
+  padding: 0.35em 0.65em;
+}
+
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background-color: rgba(0,0,0,0.05);
+  transition: all 0.2s;
+}
+
+.btn-icon:hover {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.btn-icon.text-primary:hover {
+  background-color: rgba(13, 110, 253, 0.1);
+}
+
+.btn-icon.text-danger:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* Home page specific styles */
+.welcome-container {
+  position: relative;
+  z-index: 10;
+  padding: 2rem 0;
+}
+
+.welcome-container h1 {
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  letter-spacing: -0.5px;
+}
+
+/* Forum styles */
+.message-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.message-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.message-avatar {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.reply-content {
+  border-radius: 0 1.25rem 1.25rem 1.25rem !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 767.98px) {
+  .card-header .d-flex {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+  
+  .card-header .dropdown {
+    align-self: flex-end;
+    margin-top: -2rem;
+  }
+  
+  .d-flex.flex-wrap {
+    flex-direction: column;
+  }
+  
+  .d-flex.flex-wrap > div:first-child {
+    margin-bottom: 1rem;
+  }
+  
+  /* Make UI elements more touch-friendly on mobile */
+  .btn {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+  
+  .btn-sm {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  
+  .dropdown-item {
+    padding: 0.5rem 1rem;
+  }
+  
+  /* Notes specific mobile styling */
+  .notes-container .row {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+  }
+  
+  .notes-container [class*="col-"] {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+/* Button animations */
+.btn {
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Form styles */
+.form-control:focus, .form-select:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+textarea {
+  resize: none;
+}
+
+/* Empty state styles */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  color: #ccc;
+  margin-bottom: 1rem;
+}
+
+.empty-state h4 {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  color: #6c757d;
 }
 
 

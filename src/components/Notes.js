@@ -1,78 +1,53 @@
 import React, { useContext, useEffect, useState } from "react";
-import noteContext from "../context/notes/noteContext";
+import NoteContext from "../context/notes/NoteContext";
+import Addnote from "./Addnote";
 import NoteItem from "./NoteItem";
-import AddNote from "./AddNote.js";
-import { toast } from 'react-toastify';
 
 const Notes = () => {
-  // Correctly check for the auth token using the same key used in login
-  const isLoggedIn = localStorage.getItem("auth-token") ? true : false;
-  const [userName, setUserName] = useState("Guest");
-  console.log("User name from localStorage:", localStorage.getItem("user-name"));
-  console.log("DANYAL THE CODER");
-  const context = useContext(noteContext);
+  const context = useContext(NoteContext);
   const { notes, getNotes, editNote } = context;
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredNotes, setFilteredNotes] = useState([]);
+  const [currentView, setCurrentView] = useState("grid"); // grid or list
 
   useEffect(() => {
-    if (isLoggedIn) {
-      getNotes();
-      
-      // Fetch user details from API regardless of localStorage state
-      const fetchUserDetails = async () => {
-        try {
-          const authToken = localStorage.getItem("auth-token");
-          const response = await fetch("http://localhost:5000/api/auth/getuser", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "auth-token": authToken
-            }
-          });
-          
-          if (response.ok) {
-            const userData = await response.json();
-            console.log("User data fetched:", userData);
-            if (userData && userData.name) {
-              localStorage.setItem("user-name", userData.name);
-              setUserName(userData.name);
-            }
-          } else {
-            console.log("Failed to fetch user details, using localStorage");
-            // Try localStorage as fallback
-            const storedName = localStorage.getItem("user-name");
-            if (storedName) {
-              setUserName(storedName);
-            }
-          }
-        } catch (error) {
-          console.error("Error fetching user details:", error);
-          // On error, try localStorage as fallback
-          const storedName = localStorage.getItem("user-name");
-          if (storedName) {
-            setUserName(storedName);
-          }
-        }
-      };
-      
-      fetchUserDetails();
+    const fetchNotes = async () => {
+      await getNotes();
+      setLoading(false);
+    };
+    fetchNotes();
+  }, [getNotes]);
+
+  useEffect(() => {
+    if (searchTerm) {
+      const filtered = notes.filter(
+        note =>
+          note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          note.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          note.tag.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredNotes(filtered);
+    } else {
+      setFilteredNotes(notes);
     }
-  }, [isLoggedIn, getNotes]);
+  }, [searchTerm, notes]);
 
   const [note, setNote] = useState({
     id: "",
     etitle: "",
     edescription: "",
-    etag: ""
+    etag: "",
   });
 
   const updateNote = (currentNote) => {
     const modal = new window.bootstrap.Modal(document.getElementById("exampleModal"));
-    modal.show(); // Show modal programmatically
+    modal.show();
     setNote({
       id: currentNote._id,
       etitle: currentNote.title,
       edescription: currentNote.description,
-      etag: currentNote.tag
+      etag: currentNote.tag,
     });
   };
 
@@ -83,17 +58,25 @@ const Notes = () => {
   const handleClick = (e) => {
     e.preventDefault();
     editNote(note.id, note.etitle, note.edescription, note.etag);
-    
-    // Hide the modal after editing
     const modal = window.bootstrap.Modal.getInstance(document.getElementById("exampleModal"));
     modal.hide();
   };
 
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center my-5">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div>
+    <div className="notes-container">
       {/* Modal */}
       <div
-        className="modal fade "
+        className="modal fade"
         id="exampleModal"
         tabIndex="-1"
         aria-labelledby="exampleModalLabel"
@@ -131,13 +114,13 @@ const Notes = () => {
                   <label htmlFor="edescription" className="form-label">
                     Description
                   </label>
-                  <input
-                    type="text"
+                  <textarea
                     className="form-control"
                     id="edescription"
                     name="edescription"
                     value={note.edescription}
                     onChange={handleChange}
+                    rows="3"
                   />
                 </div>
                 <div className="mb-3">
@@ -171,31 +154,79 @@ const Notes = () => {
         </div>
       </div>
 
-      <div className="container-fluid m-4">
-        <div className="row">
-          <div className="col-md-4">
-            <AddNote/>
-          </div>
-
-          {/* Notes List */}
-          <div className="col-md-8">
-            <div className="background-radial-gradient overflow-hidden rounded p-4">
-              <h2 className="text-center text-white my-4">
-                Welcome, <span className="fw-bold" style={{ color: "hsl(218, 81%, 75%)" }}>{userName}</span>!
-              </h2>
-              <div className="row my-3">
-                {notes.length > 0 ? (
-                  notes.map((note) => (
-                    <NoteItem key={note._id} updateNote={updateNote} note={note} />
-                  ))
-                ) : (
-                  <div className="col-12">
-                    <p className="text-center text-white">No notes yet. Add your first note!</p>
-                  </div>
-                )}
-              </div>
+      <div className="row">
+        <div className="col-lg-4 mb-4">
+          <div className="card shadow-sm bg-glass h-100">
+            <div className="card-body">
+              <Addnote />
             </div>
           </div>
+        </div>
+        
+        <div className="col-lg-8">
+          <div className="card shadow-sm bg-glass mb-4">
+            <div className="card-body">
+              <div className="d-flex justify-content-between flex-wrap align-items-center mb-3">
+                <h3 className="card-title mb-0">Your Notes</h3>
+                <div className="d-flex">
+                  <div className="input-group me-2" style={{ maxWidth: "250px" }}>
+                    <span className="input-group-text bg-white border-end-0">
+                      <i className="fas fa-search text-muted"></i>
+                    </span>
+                    <input
+                      type="text"
+                      className="form-control border-start-0"
+                      placeholder="Search notes..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+                  <div className="btn-group" role="group">
+                    <button
+                      type="button"
+                      className={`btn ${currentView === 'grid' ? 'btn-primary' : 'btn-outline-primary'}`}
+                      onClick={() => setCurrentView('grid')}
+                    >
+                      <i className="fas fa-th-large"></i>
+                    </button>
+                    <button
+                      type="button"
+                      className={`btn ${currentView === 'list' ? 'btn-primary' : 'btn-outline-primary'}`}
+                      onClick={() => setCurrentView('list')}
+                    >
+                      <i className="fas fa-list"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              {filteredNotes.length === 0 && (
+                <div className="text-center p-5">
+                  <i className="far fa-sticky-note fs-1 text-muted mb-3"></i>
+                  <h5>No notes found</h5>
+                  {searchTerm ? (
+                    <p className="text-muted">No notes match your search criteria.</p>
+                  ) : (
+                    <p className="text-muted">Add your first note to get started!</p>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {filteredNotes.length > 0 && (
+            <div className={`row ${currentView === 'list' ? 'flex-column' : ''}`}>
+              {filteredNotes.map((note) => (
+                <div key={note._id} className={currentView === 'list' ? 'col-12 mb-3' : 'col-md-6 col-xl-6 mb-4'}>
+                  <NoteItem
+                    updateNote={updateNote}
+                    note={note}
+                    viewType={currentView}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

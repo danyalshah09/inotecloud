@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Alert } from "./Alert";
-import { toast } from 'react-toastify';
-import { parseToken } from "../utils/tokenHelper";
 
-export const Login = ({ setAlertMessage }) => {
+export const Login = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [alert, setAlert] = useState({ visible: false, message: "", type: "" });
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -17,19 +15,8 @@ export const Login = ({ setAlertMessage }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const { email, password } = credentials;
-
-    if (!email.trim() || !password.trim()) {
-      setAlert({
-        visible: true,
-        message: "Please enter both email and password",
-        type: "danger",
-      });
-      setTimeout(() => setAlert({ visible: false, message: "", type: "" }), 3000);
-      return;
-    }
-
-    setIsSubmitting(true);
 
     try {
       const response = await fetch("http://localhost:5000/api/auth/login", {
@@ -41,74 +28,94 @@ export const Login = ({ setAlertMessage }) => {
       });
 
       const json = await response.json();
-      console.log("Login response:", json);
 
       if (response.ok) {
+        // Store token in localStorage
         localStorage.setItem("auth-token", json.authToken);
-        const userName = json.name || "";
-        localStorage.setItem("user-name", String(userName));
         
-        const parsedToken = parseToken(json.authToken);
-        if (parsedToken && parsedToken.user && parsedToken.user.id) {
-          localStorage.setItem("user-id", parsedToken.user.id);
+        // Store user info
+        if (json.user && json.user._id) {
+          localStorage.setItem("userId", json.user._id);
+        } else if (json.userId) {
+          localStorage.setItem("userId", json.userId);
         }
         
+        const userName = json.name || (json.user ? json.user.name : "");
+        localStorage.setItem("user-name", String(userName));
+
         setAlert({
           visible: true,
-          message: `Welcome back, ${userName}!`,
+          message: "Login successful!",
           type: "success",
         });
-        
-        if (setAlertMessage) {
-          setAlertMessage(`Welcome back, ${userName}!`);
-        }
-        
-        toast.success("Login successful! Redirecting to home page...");
 
+        // Delay the navigation to Home component
         setTimeout(() => {
           navigate("/");
         }, 1500);
       } else {
-        const errorMessage = json.error || "Invalid credentials!";
         setAlert({
           visible: true,
-          message: errorMessage,
+          message: json.error || "Invalid credentials!",
           type: "danger",
         });
-        toast.error(errorMessage);
       }
     } catch (error) {
       console.error("Error during login:", error);
       setAlert({
         visible: true,
-        message: "Server connection error. Please try again later.",
+        message: "An error occurred. Please try again later.",
         type: "danger",
       });
-      toast.error("Unable to connect to the server. Please check your internet connection.");
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
+      // Hide the alert after 2 seconds
+      setTimeout(() => {
+        setAlert({ visible: false, message: "", type: "" });
+      }, 2000);
     }
   };
 
   return (
     <>
       {alert.visible && <Alert message={alert.message} type={alert.type} />}
-      <div className="auth-container">
-        <div className="auth-content">
+      <section className="background-radial-gradient overflow-hidden min-vh-100">
+        <div className="container px-4 py-5 px-md-5 text-center text-lg-start">
           <div className="row gx-lg-5 align-items-center">
             <div className="col-lg-6 mb-5 mb-lg-0" style={{ zIndex: 10 }}>
-              <h1 className="my-5 display-5 fw-bold ls-tight">
-                <span className="text-primary">iNoteCloud</span>
+              <h1
+                className="my-5 display-5 fw-bold ls-tight"
+                style={{ color: "hsl(218, 81%, 95%)" }}
+              >
+                Never Forget What's Important –
+                <br />
+                <span style={{ color: "hsl(218, 81%, 75%)" }}>
+                  Your Notes, Always in Reach.
+                </span>
               </h1>
-              <h2 className="mb-4">Login</h2>
-              <p className="mb-4 opacity-70">
-                Welcome back! Please enter your credentials to access your notes.
+              <p
+                className="mb-4 opacity-70"
+                style={{ color: "hsl(218, 81%, 85%)" }}
+              >
+                Streamline your workflow with our cutting-edge notes app.
+                Securely organize, access, and manage your notes
+                effortlessly—designed to boost productivity and drive success.
               </p>
             </div>
 
             <div className="col-lg-6 mb-5 mb-lg-0 position-relative">
-              <div className="card bg-glass">
+              <div
+                id="radius-shape-1"
+                className="position-absolute rounded-circle shadow-5-strong"
+              ></div>
+              <div
+                id="radius-shape-2"
+                className="position-absolute shadow-5-strong"
+              ></div>
+
+              <div className="card bg-glass shadow-lg">
                 <div className="card-body px-4 py-5 px-md-5">
+                  <h3 className="mb-4 text-center">Sign In</h3>
                   <form onSubmit={handleSubmit}>
                     <div className="form-outline mb-4">
                       <label className="form-label" htmlFor="email">
@@ -138,21 +145,25 @@ export const Login = ({ setAlertMessage }) => {
                       />
                     </div>
 
-                    <button
-                      type="submit"
-                      className="btn btn-primary btn-block mb-4 w-100"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? "Signing in..." : "Sign in"}
-                    </button>
+                    <div className="d-grid">
+                      <button
+                        type="submit"
+                        className="btn btn-primary btn-lg mb-4"
+                        disabled={isLoading}
+                      >
+                        {isLoading ? (
+                          <>
+                            <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            Signing in...
+                          </>
+                        ) : (
+                          "Sign in"
+                        )}
+                      </button>
+                    </div>
 
                     <div className="text-center">
-                      <p>
-                        Don't have an account?{" "}
-                        <a href="/signup" className="text-primary">
-                          Sign up
-                        </a>
-                      </p>
+                      <p>Don't have an account? <Link to="/signup">Sign up</Link></p>
                     </div>
                   </form>
                 </div>
@@ -160,7 +171,7 @@ export const Login = ({ setAlertMessage }) => {
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </>
   );
 };

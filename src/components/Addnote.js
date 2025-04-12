@@ -1,16 +1,24 @@
 import React, {useContext, useState} from 'react'
-import noteContext from "../context/notes/noteContext"
+import NoteContext from "../context/notes/NoteContext"
 
-const AddNote = () => {
-    const context = useContext(noteContext);
+const Addnote = () => {
+    const context = useContext(NoteContext);
     const {addNote} = context;
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [note, setNote] = useState({title: "", description: "", tag: ""})
 
-    const handleClick = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        addNote(note.title, note.description, note.tag || "default");
-        setNote({ title: "", description: "", tag: "" });
+        setIsSubmitting(true);
+        
+        try {
+            await addNote(note.title, note.description, note.tag || "general");
+            setNote({ title: "", description: "", tag: "" });
+        } catch (error) {
+            console.error("Error adding note:", error);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
     
     const onChange = (e)=>{
@@ -18,9 +26,9 @@ const AddNote = () => {
     }
     
     return (
-        <div className="container text-white h-[100%] background-radial-gradient overflow-hidden p-4 rounded shadow-lg" style={{ maxWidth: "400px" }}>
-            <h2 className="mb-4">Add a Note</h2>
-            <form className="my-3">
+        <>
+            <h3 className="mb-4">Add a New Note</h3>
+            <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="title" className="form-label">Title</label>
                     <input 
@@ -30,7 +38,7 @@ const AddNote = () => {
                         id="title" 
                         value={note.title} 
                         name="title" 
-                        placeholder="Enter title"
+                        placeholder="Enter a title for your note"
                         onChange={onChange} 
                     /> 
                 </div>
@@ -42,34 +50,50 @@ const AddNote = () => {
                         value={note.description} 
                         id="description" 
                         name="description" 
-                        rows="3"
-                        placeholder="Enter description" 
+                        rows="4"
+                        placeholder="Write your note here..." 
                         onChange={onChange} 
                     />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="tag" className="form-label">Tag</label>
-                    <input 
-                        type="text" 
-                        className="form-control" 
-                        value={note.tag} 
-                        id="tag" 
-                        name="tag" 
-                        placeholder="Optional tag"
-                        onChange={onChange} 
-                    />
+                    <select
+                        className="form-select"
+                        id="tag"
+                        name="tag"
+                        value={note.tag}
+                        onChange={onChange}
+                    >
+                        <option value="general">General</option>
+                        <option value="work">Work</option>
+                        <option value="personal">Personal</option>
+                        <option value="todo">To Do</option>
+                        <option value="important">Important</option>
+                        <option value="idea">Idea</option>
+                    </select>
                 </div>
-                <button 
-                    type="submit" 
-                    className="btn btn-primary w-100" 
-                    onClick={handleClick}
-                    disabled={!note.title || !note.description}
-                >
-                    Add Note
-                </button>
+                <div className="d-grid">
+                    <button 
+                        type="submit" 
+                        className="btn btn-primary" 
+                        disabled={!note.title || !note.description || isSubmitting}
+                    >
+                        {isSubmitting ? (
+                            <>
+                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                Saving...
+                            </>
+                        ) : (
+                            <>
+                                <i className="fas fa-plus-circle me-2"></i>
+                                Add Note
+                            </>
+                        )}
+                    </button>
+                </div>
             </form>
-        </div>
+        </>
     )
 }
 
-export default AddNote
+export default Addnote

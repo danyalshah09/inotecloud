@@ -1,83 +1,97 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
-  const authToken = localStorage.getItem('auth-token');
-  const userName = localStorage.getItem('user-name');
+  const location = useLocation(); // Get the current location
+  const navigate = useNavigate(); // For redirection
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  useEffect(() => {
+    // Check login status on component mount or location change
+    const authToken = localStorage.getItem("auth-token");
+    setIsLoggedIn(!!authToken);
+    
+    if (authToken) {
+      const storedName = localStorage.getItem("user-name");
+      setUserName(storedName || "");
+    }
+  }, [location]); // Re-run when location changes
 
   const handleLogout = () => {
-    localStorage.removeItem('auth-token');
-    localStorage.removeItem('user-name');
-    localStorage.removeItem('user-id');
-    navigate('/login');
+    localStorage.removeItem("auth-token"); // Remove the token
+    localStorage.removeItem("user-name"); // Remove the username
+    localStorage.removeItem("userId"); // Remove the user ID
+    setIsLoggedIn(false); // Update state
+    navigate("/login"); // Redirect to login page
   };
 
   return (
-    <nav className="navbar navbar-expand-md navbar-light bg-light">
-      <div className="container">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="container-fluid">
         <Link className="navbar-brand" to="/">
-          <span style={{ color: "hsl(218, 81%, 75%)" }}>iNoteCloud</span>
+          iNoteCloud
         </Link>
-        
         <button
           className="navbar-toggler"
           type="button"
-          onClick={toggleMenu}
-          aria-expanded={isMenuOpen}
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
           aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}>
-          <ul className="navbar-nav ms-auto">
-            {authToken ? (
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <li className="nav-item">
+              <Link
+                className={`nav-link ${location.pathname === "/" ? "active" : ""}`}
+                to="/"
+              >
+                Home
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                className={`nav-link ${location.pathname === "/forum" ? "active" : ""}`}
+                to="/forum"
+              >
+                Discussion Forum
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                className={`nav-link ${location.pathname === "/about" ? "active" : ""}`}
+                to="/about"
+              >
+                About
+              </Link>
+            </li>
+          </ul>
+          
+          <div className="d-flex align-items-center">
+            {isLoggedIn && userName && (
+              <span className="text-light me-3 d-none d-md-block">Welcome, {userName}</span>
+            )}
+            
+            {!isLoggedIn ? (
               <>
-                <li className="nav-item">
-                  <span className="nav-link">
-                    Welcome, <span className="fw-bold" style={{ color: "hsl(218, 81%, 55%)" }}>{userName}</span>
-                  </span>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/" onClick={() => setIsMenuOpen(false)}>
-                    Home
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/forum" onClick={() => setIsMenuOpen(false)}>
-                    Forum
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <button
-                    className="btn btn-outline-danger btn-sm ms-2 mt-2 mt-md-0"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </button>
-                </li>
+                <Link className="btn btn-primary me-2" to="/login">
+                  Login
+                </Link>
+                <Link className="btn btn-outline-light" to="/signup">
+                  Signup
+                </Link>
               </>
             ) : (
-              <>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/login" onClick={() => setIsMenuOpen(false)}>
-                    Login
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/signup" onClick={() => setIsMenuOpen(false)}>
-                    Signup
-                  </Link>
-                </li>
-              </>
+              <button className="btn btn-primary" onClick={handleLogout}>
+                Logout
+              </button>
             )}
-          </ul>
+          </div>
         </div>
       </div>
     </nav>

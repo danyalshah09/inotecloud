@@ -1,78 +1,50 @@
 import "./App.css";
-import React, { useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
-  Routes,
   Route,
-  useNavigate
+  Routes,
+  Navigate,
 } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import About from "./components/About";
 import NoteState from "./context/notes/NoteState";
 import MessageState from "./context/messages/MessageState";
-import { Alert } from "./components/Alert";
-import { Login } from "./components/Login";
 import { Signup } from "./components/Signup";
+import { Login } from "./components/Login";
 import Forum from "./components/Forum";
-import { isTokenValid, isTokenAboutToExpire, clearAuthData } from './utils/tokenHelper';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
-// Session checker component
-const SessionChecker = () => {
-  const navigate = useNavigate();
-  
-  useEffect(() => {
-    // Check token validity
-    if (localStorage.getItem("auth-token") && !isTokenValid()) {
-      // Token is invalid or expired
-      toast.error("Your session has expired. Please log in again.");
-      clearAuthData();
-      navigate("/login");
-    } else if (isTokenAboutToExpire()) {
-      // Token is about to expire
-      toast.warning("Your session will expire soon. Please log in again to continue.", {
-        autoClose: 10000, // 10 seconds
-      });
-    }
-    
-    // Set up periodic checks
-    const intervalId = setInterval(() => {
-      if (localStorage.getItem("auth-token") && !isTokenValid()) {
-        toast.error("Your session has expired. Please log in again.");
-        clearAuthData();
-        navigate("/login");
-      }
-    }, 60000); // Check every minute
-    
-    return () => clearInterval(intervalId);
-  }, [navigate]);
-  
-  return null;
+// Create a ProtectedRoute component
+const ProtectedRoute = ({ element }) => {
+  const isAuthenticated = !!localStorage.getItem("auth-token"); // Check auth token
+  return isAuthenticated ? element : <Navigate to="/login" />;
 };
 
 function App() {
-  const [alertMessage, setAlertMessage] = useState("Notes at your fingertip");
-
   return (
     <>
       <NoteState>
         <MessageState>
           <Router>
-            <SessionChecker />
             <Navbar />
-            <main>
-              <Alert message={alertMessage} />
-              <ToastContainer position="top-right" />
+            <div className="container">
               <Routes>
-                <Route exact path="/" element={<Home />} />
+                {/* Protect Home route */}
+                <Route
+                  exact
+                  path="/"
+                  element={<ProtectedRoute element={<Home />} />}
+                />
                 <Route exact path="/about" element={<About />} />
-                <Route exact path="/login" element={<Login setAlertMessage={setAlertMessage} />} />
-                <Route exact path="/signup" element={<Signup setAlertMessage={setAlertMessage} />} />
-                <Route exact path="/forum" element={<Forum />} />
+                <Route exact path="/login" element={<Login />} />
+                <Route exact path="/signup" element={<Signup />} />
+                <Route
+                  exact
+                  path="/forum"
+                  element={<ProtectedRoute element={<Forum />} />}
+                />
               </Routes>
-            </main>
+            </div>
           </Router>
         </MessageState>
       </NoteState>
