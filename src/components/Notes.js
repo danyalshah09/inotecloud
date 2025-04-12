@@ -28,7 +28,7 @@ const Notes = () => {
           note.tag.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredNotes(filtered);
-    } else {
+          } else {
       setFilteredNotes(notes);
     }
   }, [searchTerm, notes]);
@@ -154,15 +154,15 @@ const Notes = () => {
         </div>
       </div>
 
-      <div className="row">
+        <div className="row">
         <div className="col-lg-4 mb-4">
           <div className="card shadow-sm bg-glass h-100">
             <div className="card-body">
               <Addnote />
             </div>
           </div>
-        </div>
-        
+          </div>
+
         <div className="col-lg-8">
           <div className="card shadow-sm bg-glass mb-4">
             <div className="card-body">

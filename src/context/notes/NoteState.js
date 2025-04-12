@@ -1,10 +1,9 @@
-import React, { createContext, useReducer } from "react";
+import React from "react";
 import NoteContext from "./NoteContext";
-import NoteReducer from "./NoteReducer";
 import { useState } from "react";
 
 const NoteState = (props) => {
-  const host = "http://localhost:5000";
+  const host = process.env.REACT_APP_API_URL || "http://localhost:5000";
   const notesInitial = [];
   const [notes, setNotes] = useState(notesInitial);
 
@@ -24,11 +23,11 @@ const NoteState = (props) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const json = await response.json();
-      console.log("Fetched Notes:", json); // Add this for debugging
+      const fetchedNotes = await response.json();
+      console.log("Fetched Notes:", fetchedNotes); // Add this for debugging
       console.log("Auth Token:", authToken);
 
-      setNotes(json);
+      setNotes(fetchedNotes);
     } catch (error) {
       console.error("Error fetching notes:", error);
     }
@@ -48,8 +47,8 @@ const NoteState = (props) => {
       body: JSON.stringify({ title, description, tag }),
     });
 
-    const json = await response.json();
-    setNotes(notes.concat(json));
+    const newNote = await response.json();
+    setNotes(notes.concat(newNote));
   };
 
   // Delete a Note
@@ -74,7 +73,7 @@ const NoteState = (props) => {
   const editNote = async (id, title, description, tag) => {
     const authToken = localStorage.getItem("auth-token");
 
-    const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
+    await fetch(`${host}/api/notes/updatenote/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -82,8 +81,6 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ title, description, tag }),
     });
-
-    const json = await response.json();
    
     const newNotes = notes.map((note) =>
       note._id === id ? { ...note, title, description, tag } : note
