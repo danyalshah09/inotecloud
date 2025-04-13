@@ -16,20 +16,34 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    const { email, password } = credentials;
-
     try {
       const response = await fetch("https://inotebackend-nloj.onrender.com/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: credentials.email, password: credentials.password }),
       });
 
-      const json = await response.json();
+      // Log response details for debugging
+      console.log("Response status:", response.status);
+      
+      // Handle non-OK responses before attempting to parse JSON
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Server error (${response.status}):`, errorText);
+        setAlert({
+          visible: true,
+          message: `Server error: ${response.status}. Please try again later.`,
+          type: "danger",
+        });
+        return;
+      }
 
-      if (response.ok) {
+      // Only try to parse JSON if we know it's a successful response
+      const json = await response.json();
+      
+      if (json.success) {
         // Store token in localStorage
         localStorage.setItem("auth-token", json.authToken);
         
