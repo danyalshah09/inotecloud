@@ -97,7 +97,6 @@ export const Login = () => {
               <div className="card bg-glass shadow-lg">
                 <div className="card-body p-4 p-md-5">
                   <h3 className="mb-4 text-center">Sign In</h3>
-                  {alert.visible && <Alert message={alert.message} type={alert.type} />}
                   <form onSubmit={handleSubmit}>
                     <div className="form-outline mb-4">
                       <label className="form-label" htmlFor="email">
@@ -130,7 +129,7 @@ export const Login = () => {
                     <div className="d-grid">
                       <button
                         type="submit"
-                        className="btn btn-primary btn-lg mb-4"
+                        className="btn btn-primary btn-lg"
                         disabled={isLoading}
                       >
                         {isLoading ? (
@@ -144,7 +143,13 @@ export const Login = () => {
                       </button>
                     </div>
 
-                    <div className="text-center">
+                    {alert.visible && (
+                      <div className="mt-3">
+                        <Alert message={alert.message} type={alert.type} />
+                      </div>
+                    )}
+
+                    <div className="text-center mt-3">
                       <p className="mb-0">Don't have an account? <Link to="/signup">Sign up</Link></p>
                     </div>
                   </form>
