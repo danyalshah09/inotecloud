@@ -69,7 +69,6 @@ export const Login = () => {
 
   return (
     <div className="min-vh-100 position-relative">
-      {alert.visible && <Alert message={alert.message} type={alert.type} />}
       <section className="background-radial-gradient overflow-hidden min-vh-100">
         <div className="container px-4 py-5 px-md-5 text-center text-lg-start">
           <div className="row gx-lg-5 align-items-center mb-5">
@@ -98,6 +97,7 @@ export const Login = () => {
               <div className="card bg-glass shadow-lg">
                 <div className="card-body p-4 p-md-5">
                   <h3 className="mb-4 text-center">Sign In</h3>
+                  {alert.visible && <Alert message={alert.message} type={alert.type} />}
                   <form onSubmit={handleSubmit}>
                     <div className="form-outline mb-4">
                       <label className="form-label" htmlFor="email">

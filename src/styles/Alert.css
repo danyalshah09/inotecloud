@@ -1,38 +1,30 @@
-.alert-container {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 500px;
-  z-index: 1050;
+.alert-wrapper {
+  width: 100%;
 }
 
 .alert {
   margin-bottom: 0;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  animation: slideDown 0.3s ease-out;
+  animation: fadeIn 0.3s ease-out;
+  text-align: center;
 }
 
-@keyframes slideDown {
+@keyframes fadeIn {
   from {
-    transform: translateY(-100%);
     opacity: 0;
+    transform: translateY(-10px);
   }
   to {
-    transform: translateY(0);
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
 @media (max-width: 576px) {
-  .alert-container {
-    top: 10px;
-    width: 95%;
-  }
-  
   .alert {
     padding: 0.75rem 1rem;
     font-size: 0.9rem;
+    margin: 0 auto;
+    width: 100%;
   }
 } 
