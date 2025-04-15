@@ -16,19 +16,19 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setAlert({ visible: false, message: "", type: "" });
+
     try {
       const response = await fetch("https://inotebackend-nloj.onrender.com/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Accept": "application/json"
         },
+        credentials: "include",
         body: JSON.stringify({ email: credentials.email, password: credentials.password }),
       });
 
-      // Log response details for debugging
-      console.log("Response status:", response.status);
-      
-      // Handle non-OK responses before attempting to parse JSON
       if (!response.ok) {
         const errorText = await response.text();
         console.error(`Server error (${response.status}):`, errorText);
@@ -40,37 +40,18 @@ export const Login = () => {
         return;
       }
 
-      // Only try to parse JSON if we know it's a successful response
       const json = await response.json();
       
-      if (json.success) {
-        // Store token in localStorage
+      if (json.authToken) {
         localStorage.setItem("auth-token", json.authToken);
-        
-        // Store user info
-        if (json.user && json.user._id) {
-          localStorage.setItem("userId", json.user._id);
-        } else if (json.userId) {
-          localStorage.setItem("userId", json.userId);
-        }
-        
-        const userName = json.name || (json.user ? json.user.name : "");
-        localStorage.setItem("user-name", String(userName));
-
-        setAlert({
-          visible: true,
-          message: "Login successful!",
-          type: "success",
-        });
-
-        // Delay the navigation to Home component
-        setTimeout(() => {
-          navigate("/");
-        }, 1500);
+        localStorage.setItem("user-name", json.name);
+        localStorage.setItem("user-id", json.userId);
+        localStorage.setItem("user-email", json.email);
+        navigate("/");
       } else {
         setAlert({
           visible: true,
-          message: json.error || "Invalid credentials!",
+          message: json.error || "Invalid credentials",
           type: "danger",
         });
       }
@@ -78,15 +59,11 @@ export const Login = () => {
       console.error("Error during login:", error);
       setAlert({
         visible: true,
-        message: "An error occurred. Please try again later.",
+        message: "Cannot connect to the server. Please check your internet connection or try again later.",
         type: "danger",
       });
     } finally {
       setIsLoading(false);
-      // Hide the alert after 2 seconds
-      setTimeout(() => {
-        setAlert({ visible: false, message: "", type: "" });
-      }, 2000);
     }
   };
 
