@@ -68,14 +68,14 @@ export const Login = () => {
   };
 
   return (
-    <>
+    <div className="min-vh-100 position-relative">
       {alert.visible && <Alert message={alert.message} type={alert.type} />}
       <section className="background-radial-gradient overflow-hidden min-vh-100">
         <div className="container px-4 py-5 px-md-5 text-center text-lg-start">
-          <div className="row gx-lg-5 align-items-center">
+          <div className="row gx-lg-5 align-items-center mb-5">
             <div className="col-lg-6 mb-5 mb-lg-0" style={{ zIndex: 10 }}>
               <h1
-                className="my-5 display-5 fw-bold ls-tight"
+                className="my-4 display-5 fw-bold ls-tight"
                 style={{ color: "hsl(218, 81%, 95%)" }}
               >
                 Never Forget What's Important –
@@ -85,7 +85,7 @@ export const Login = () => {
                 </span>
               </h1>
               <p
-                className="mb-4 opacity-70"
+                className="mb-4 opacity-70 d-none d-lg-block"
                 style={{ color: "hsl(218, 81%, 85%)" }}
               >
                 Streamline your workflow with our cutting-edge notes app.
@@ -94,18 +94,9 @@ export const Login = () => {
               </p>
             </div>
 
-            <div className="col-lg-6 mb-5 mb-lg-0 position-relative">
-              <div
-                id="radius-shape-1"
-                className="position-absolute rounded-circle shadow-5-strong"
-              ></div>
-              <div
-                id="radius-shape-2"
-                className="position-absolute shadow-5-strong"
-              ></div>
-
+            <div className="col-lg-6 position-relative">
               <div className="card bg-glass shadow-lg">
-                <div className="card-body px-4 py-5 px-md-5">
+                <div className="card-body p-4 p-md-5">
                   <h3 className="mb-4 text-center">Sign In</h3>
                   <form onSubmit={handleSubmit}>
                     <div className="form-outline mb-4">
@@ -154,7 +145,7 @@ export const Login = () => {
                     </div>
 
                     <div className="text-center">
-                      <p>Don't have an account? <Link to="/signup">Sign up</Link></p>
+                      <p className="mb-0">Don't have an account? <Link to="/signup">Sign up</Link></p>
                     </div>
                   </form>
                 </div>
@@ -163,6 +154,6 @@ export const Login = () => {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
