@@ -8,7 +8,7 @@ const About = () => {
         {/* Left Column: Image */}
         <div className="col-md-6 text-center">
           <img
-            src="/notes.jpg"
+            src="/notes.webp"
             alt="About Notes App"
             className="img-fluid about-image"
           />
