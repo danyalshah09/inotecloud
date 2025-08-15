@@ -55,11 +55,18 @@ const Notes = () => {
     setNote({ ...note, [e.target.name]: e.target.value });
   };
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
-    editNote(note.id, note.etitle, note.edescription, note.etag);
-    const modal = window.bootstrap.Modal.getInstance(document.getElementById("exampleModal"));
-    modal.hide();
+    try {
+      await editNote(note.id, note.etitle, note.edescription, note.etag);
+      const modal = window.bootstrap.Modal.getInstance(document.getElementById("exampleModal"));
+      modal.hide();
+      // You could add a success toast here if you have toast notifications
+    } catch (error) {
+      console.error("Error updating note:", error);
+      // You could add an error toast here if you have toast notifications
+      alert("Failed to update note. Please try again.");
+    }
   };
 
   if (loading) {
@@ -199,7 +206,7 @@ const Notes = () => {
                   </div>
                 </div>
               </div>
-              
+
               {filteredNotes.length === 0 && (
                 <div className="text-center p-5">
                   <i className="far fa-sticky-note fs-1 text-muted mb-3"></i>
@@ -213,7 +220,7 @@ const Notes = () => {
               )}
             </div>
           </div>
-          
+
           {filteredNotes.length > 0 && (
             <div className={`row ${currentView === 'list' ? 'flex-column' : ''}`}>
               {filteredNotes.map((note) => (

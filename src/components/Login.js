@@ -30,11 +30,38 @@ export const Login = () => {
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`Server error (${response.status}):`, errorText);
+        let errorMessage = "An error occurred during login. Please try again.";
+
+        try {
+          const errorData = await response.json();
+          // Handle specific error messages from the server
+          if (errorData.error) {
+            errorMessage = errorData.error;
+          } else if (response.status === 400) {
+            errorMessage = "Invalid email or password. Please check your credentials and try again.";
+          } else if (response.status === 401) {
+            errorMessage = "Invalid email or password. Please check your credentials and try again.";
+          } else if (response.status === 404) {
+            errorMessage = "User not found. Please check your email or sign up for a new account.";
+          } else if (response.status === 500) {
+            errorMessage = "Server error. Please try again later.";
+          }
+        } catch (parseError) {
+          // If we can't parse the JSON, use status-based messages
+          if (response.status === 400) {
+            errorMessage = "Invalid email or password. Please check your credentials and try again.";
+          } else if (response.status === 401) {
+            errorMessage = "Invalid email or password. Please check your credentials and try again.";
+          } else if (response.status === 404) {
+            errorMessage = "User not found. Please check your email or sign up for a new account.";
+          } else if (response.status === 500) {
+            errorMessage = "Server error. Please try again later.";
+          }
+        }
+
         setAlert({
           visible: true,
-          message: `Server error: ${response.status}. Please try again later.`,
+          message: errorMessage,
           type: "danger",
         });
         return;

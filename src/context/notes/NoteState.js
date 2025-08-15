@@ -63,38 +63,64 @@ const NoteState = (props) => {
 
   // Delete a Note
   const deleteNote = async (id) => {
-    const authToken = localStorage.getItem("auth-token");
+    try {
+      const authToken = localStorage.getItem("auth-token");
 
-    //API CALL
-    await fetch(`${host}/api/notes/deletenote/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": authToken
-      },
-    });
+      const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": authToken
+        },
+      });
 
-    const newNotes = notes.filter((note) => note._id !== id);
-    setNotes(newNotes);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Error deleting note:", errorData);
+        throw new Error(`Failed to delete note: ${response.status} ${response.statusText}`);
+      }
+
+      const newNotes = notes.filter((note) => note._id !== id);
+      setNotes(newNotes);
+      return true;
+    } catch (error) {
+      console.error("Error in deleteNote function:", error.message);
+      throw error;
+    }
   };
 
   // Edit a Note
   const editNote = async (id, title, description, tag) => {
-    const authToken = localStorage.getItem("auth-token");
+    try {
+      const authToken = localStorage.getItem("auth-token");
 
-    await fetch(`${host}/api/notes/updatenote/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": authToken
-      },
-      body: JSON.stringify({ title, description, tag }),
-    });
+      const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": authToken
+        },
+        body: JSON.stringify({ title, description, tag }),
+      });
 
-    const newNotes = notes.map((note) =>
-      note._id === id ? { ...note, title, description, tag } : note
-    );
-    setNotes(newNotes);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Error updating note:", errorData);
+        throw new Error(`Failed to update note: ${response.status} ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      const updatedNote = result.note; // Backend returns { note }
+
+      const newNotes = notes.map((note) =>
+        note._id === id ? updatedNote : note
+      );
+      setNotes(newNotes);
+      return updatedNote;
+    } catch (error) {
+      console.error("Error in editNote function:", error.message);
+      throw error;
+    }
   };
 
   return (
