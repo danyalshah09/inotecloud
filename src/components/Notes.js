@@ -55,29 +55,11 @@ const Notes = () => {
     setNote({ ...note, [e.target.name]: e.target.value });
   };
 
-  const handleClick = async (e) => {
+  const handleClick = (e) => {
     e.preventDefault();
-
-    // Validate input fields
-    if (!note.etitle.trim() || note.etitle.trim().length < 3) {
-      alert("Title must be at least 3 characters long.");
-      return;
-    }
-
-    if (!note.edescription.trim() || note.edescription.trim().length < 5) {
-      alert("Description must be at least 5 characters long.");
-      return;
-    }
-
-    try {
-      await editNote(note.id, note.etitle.trim(), note.edescription.trim(), note.etag.trim());
-      const modal = window.bootstrap.Modal.getInstance(document.getElementById("exampleModal"));
-      modal.hide();
-      alert("Note updated successfully!");
-    } catch (error) {
-      console.error("Error updating note:", error);
-      alert("Failed to update note. Please try again.");
-    }
+    editNote(note.id, note.etitle, note.edescription, note.etag);
+    const modal = window.bootstrap.Modal.getInstance(document.getElementById("exampleModal"));
+    modal.hide();
   };
 
   if (loading) {

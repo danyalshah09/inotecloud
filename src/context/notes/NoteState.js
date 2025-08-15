@@ -24,6 +24,8 @@ const NoteState = (props) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const fetchedNotes = await response.json();
+      console.log("Fetched Notes:", fetchedNotes); // Add this for debugging
+      console.log("Auth Token:", authToken);
 
       setNotes(fetchedNotes);
     } catch (error) {
@@ -35,7 +37,9 @@ const NoteState = (props) => {
   // Add a Note
   const addNote = async (title, description, tag) => {
     try {
+      console.log("Adding note with data:", { title, description, tag });
       const authToken = localStorage.getItem("auth-token");
+      console.log("Auth token:", authToken ? "Present" : "Missing");
 
       const response = await fetch(`${host}/api/notes/addnote`, {
         method: "POST",
@@ -53,6 +57,7 @@ const NoteState = (props) => {
       }
 
       const newNote = await response.json();
+      console.log("Note added successfully:", newNote);
       setNotes(notes.concat(newNote));
       return newNote;
     } catch (error) {
@@ -63,64 +68,39 @@ const NoteState = (props) => {
 
   // Delete a Note
   const deleteNote = async (id) => {
-    try {
-      const authToken = localStorage.getItem("auth-token");
+    const authToken = localStorage.getItem("auth-token");
 
-      const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": authToken
-        },
-      });
+    //API CALL
+    await fetch(`${host}/api/notes/deletenote/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": authToken
+      },
+    });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error("Error deleting note:", errorData);
-        throw new Error(`Failed to delete note: ${response.status} ${response.statusText}`);
-      }
-
-      const newNotes = notes.filter((note) => note._id !== id);
-      setNotes(newNotes);
-      return true;
-    } catch (error) {
-      console.error("Error in deleteNote function:", error.message);
-      throw error;
-    }
+    console.log("Deleting the note with id " + id);
+    const newNotes = notes.filter((note) => note._id !== id);
+    setNotes(newNotes);
   };
 
   // Edit a Note
   const editNote = async (id, title, description, tag) => {
-    try {
-      const authToken = localStorage.getItem("auth-token");
+    const authToken = localStorage.getItem("auth-token");
 
-      const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": authToken
-        },
-        body: JSON.stringify({ title, description, tag }),
-      });
+    await fetch(`${host}/api/notes/updatenote/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": authToken
+      },
+      body: JSON.stringify({ title, description, tag }),
+    });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error("Error updating note:", errorData);
-        throw new Error(`Failed to update note: ${response.status} ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      const updatedNote = result.note; // Backend returns { note }
-
-      const newNotes = notes.map((note) =>
-        note._id === id ? updatedNote : note
-      );
-      setNotes(newNotes);
-      return updatedNote;
-    } catch (error) {
-      console.error("Error in editNote function:", error.message);
-      throw error;
-    }
+    const newNotes = notes.map((note) =>
+      note._id === id ? { ...note, title, description, tag } : note
+    );
+    setNotes(newNotes);
   };
 
   return (
