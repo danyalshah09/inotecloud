@@ -60,17 +60,17 @@ export const Signup = ({ setAlertMessage }) => {
       if (response.ok) {
         localStorage.setItem("auth-token", json.authToken);
         localStorage.setItem("user-name", name);
-        
+
         setAlert({
           visible: true,
           message: "Account created successfully!",
           type: "success",
         });
-        
+
         if (setAlertMessage) {
           setAlertMessage("Account created successfully!");
         }
-        
+
         toast.success("Account created! Redirecting to home page...");
 
         setTimeout(() => {
@@ -99,13 +99,13 @@ export const Signup = ({ setAlertMessage }) => {
   };
 
   return (
-    <section className="background-radial-gradient overflow-hidden min-vh-100">
+    <section className="mt-4">
       {alert.visible && <Alert message={alert.message} type={alert.type} />}
-      <div className="container px-4 py-5 px-md-5 text-center text-lg-start">
+      <div className="container px-4 px-md-5 text-center text-lg-start">
         <div className="row gx-lg-5 align-items-center">
           <div className="col-lg-6 mb-5 mb-lg-0" style={{ zIndex: 10 }}>
             <h1
-              className="my-5 display-5 fw-bold ls-tight"
+              className=" display-5 fw-bold ls-tight"
               style={{ color: "hsl(218, 81%, 95%)" }}
             >
               Join Our Community
@@ -202,7 +202,7 @@ export const Signup = ({ setAlertMessage }) => {
                       )}
                     </button>
                   </div>
-                  
+
                   <div className="text-center mt-4">
                     <p>Already have an account? <Link to="/login">Sign in</Link></p>
                   </div>

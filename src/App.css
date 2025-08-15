@@ -1,3 +1,12 @@
+/* Reset body and html to ensure full coverage */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
 .App {
   text-align: center;
 }
@@ -77,17 +86,17 @@ i{
   .navbar-collapse {
     padding: 1rem 0;
   }
-  
+
   .navbar-nav {
     margin-bottom: 1rem;
     border-bottom: 1px solid rgba(255,255,255,0.1);
     padding-bottom: 0.5rem;
   }
-  
+
   .navbar-nav .nav-link {
     padding: 0.75rem 0;
   }
-  
+
   .navbar .d-flex {
     flex-direction: row;
     justify-content: center;
@@ -96,23 +105,8 @@ i{
 
 /* Main content styles */
 main {
-  margin-top: 56px; /* Height of the navbar */
-  min-height: calc(100vh - 56px);
   position: relative;
   z-index: 1;
-  background-color: hsl(218, 41%, 15%);
-  background-image: radial-gradient(650px circle at 0% 0%,
-      hsl(218, 41%, 35%) 15%,
-      hsl(218, 41%, 30%) 35%,
-      hsl(218, 41%, 20%) 75%,
-      hsl(218, 41%, 19%) 80%,
-      transparent 100%),
-    radial-gradient(1250px circle at 100% 100%,
-      hsl(218, 41%, 45%) 15%,
-      hsl(218, 41%, 30%) 35%,
-      hsl(218, 41%, 20%) 75%,
-      hsl(218, 41%, 19%) 80%,
-      transparent 100%);
 }
 
 /* Auth pages container */
@@ -159,23 +153,42 @@ main {
 /* Common styles for all full-page components */
 .background-radial-gradient {
   background-color: hsl(218, 41%, 15%);
-  background-image: radial-gradient(650px circle at 0% 0%,
+  background-image:
+    radial-gradient(2000px circle at 0% 0%,
       hsl(218, 41%, 35%) 15%,
       hsl(218, 41%, 30%) 35%,
       hsl(218, 41%, 20%) 75%,
       hsl(218, 41%, 19%) 80%,
       transparent 100%),
-    radial-gradient(1250px circle at 100% 100%,
+    radial-gradient(3000px circle at 100% 100%,
       hsl(218, 41%, 45%) 15%,
       hsl(218, 41%, 30%) 35%,
       hsl(218, 41%, 20%) 75%,
       hsl(218, 41%, 19%) 80%,
       transparent 100%);
+  background-attachment: fixed;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  width: 100vw;
+  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+/* App content positioning */
+.app-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
 }
 
 /* Content positioning to account for fixed navbar */
-.container, .min-vh-100 {
-  padding-top: 80px !important; /* Add top padding to ensure content is visible below navbar */
+.container {
+  padding-top: 40px !important; /* Add top padding to ensure content is visible below navbar */
 }
 
 /* Notes styles */
@@ -276,41 +289,41 @@ main {
     flex-direction: column;
     align-items: flex-start !important;
   }
-  
+
   .card-header .dropdown {
     align-self: flex-end;
     margin-top: -2rem;
   }
-  
+
   .d-flex.flex-wrap {
     flex-direction: column;
   }
-  
+
   .d-flex.flex-wrap > div:first-child {
     margin-bottom: 1rem;
   }
-  
+
   /* Make UI elements more touch-friendly on mobile */
   .btn {
     padding: 0.5rem 1rem;
     font-size: 1rem;
   }
-  
+
   .btn-sm {
     padding: 0.25rem 0.75rem;
     font-size: 0.875rem;
   }
-  
+
   .dropdown-item {
     padding: 0.5rem 1rem;
   }
-  
+
   /* Notes specific mobile styling */
   .notes-container .row {
     margin-left: -0.5rem;
     margin-right: -0.5rem;
   }
-  
+
   .notes-container [class*="col-"] {
     padding-left: 0.5rem;
     padding-right: 0.5rem;

@@ -15,7 +15,7 @@ const Forum = () => {
   const [replyingTo, setReplyingTo] = useState(null);
   const [replyText, setReplyText] = useState("");
   const [userIdFromStorage, setUserIdFromStorage] = useState("");
-  
+
   useEffect(() => {
     const checkAuth = () => {
       const authToken = localStorage.getItem("auth-token");
@@ -149,13 +149,13 @@ const Forum = () => {
   };
 
   const handleLike = async (messageId, isLiked) => {
-    const success = isLiked 
+    const success = isLiked
       ? await unlikeMessage(messageId)
       : await likeMessage(messageId);
-    
+
     if (!success) {
-      toast.error(isLiked 
-        ? "Failed to unlike message" 
+      toast.error(isLiked
+        ? "Failed to unlike message"
         : "Failed to like message");
     }
   };
@@ -163,18 +163,18 @@ const Forum = () => {
   // Utility function to check if the user is the owner of a message
   const isMessageOwner = (msg) => {
     const userId = userIdFromStorage;
-    
+
     if (!userId) return false;
-    
+
     // Check different possible formats of user ID in messages
     if (msg.user && typeof msg.user === 'object' && msg.user._id === userId) {
       return true;
     }
-    
+
     if (msg.user && typeof msg.user === 'string' && msg.user === userId) {
       return true;
     }
-    
+
     return false;
   };
 
@@ -183,7 +183,7 @@ const Forum = () => {
     const date = new Date(dateString);
     const now = new Date();
     const diffInHours = Math.abs(now - date) / 36e5;
-    
+
     if (diffInHours < 24) {
       // Today
       return `Today at ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
@@ -192,14 +192,14 @@ const Forum = () => {
       return `Yesterday at ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
     } else {
       // Other days
-      return date.toLocaleDateString([], {day: 'numeric', month: 'short', year: 'numeric'}) + 
+      return date.toLocaleDateString([], {day: 'numeric', month: 'short', year: 'numeric'}) +
              ` at ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
     }
   };
 
   if (loading) {
     return (
-      <div className="min-vh-100 d-flex justify-content-center align-items-center background-radial-gradient">
+      <div className="min-vh-100 d-flex justify-content-center align-items-center ">
         <div className="text-center">
           <div className="spinner-border text-light" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -211,7 +211,7 @@ const Forum = () => {
   }
 
   return (
-    <div className="background-radial-gradient min-vh-100 py-5">
+    <div>
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-lg-8 col-md-10">
@@ -235,8 +235,8 @@ const Forum = () => {
                     ></textarea>
                   </div>
                   <div className="d-grid mt-3">
-                    <button 
-                      type="submit" 
+                    <button
+                      type="submit"
                       className="btn btn-primary"
                       disabled={!newMessage.trim()}
                     >
@@ -279,8 +279,8 @@ const Forum = () => {
                             </button>
                             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby={`dropdownMenu-${msg._id}`}>
                               <li>
-                                <button 
-                                  className="dropdown-item" 
+                                <button
+                                  className="dropdown-item"
                                   onClick={() => {
                                     setEditingMessage(msg._id);
                                     setEditText(msg.content || msg.message);
@@ -290,8 +290,8 @@ const Forum = () => {
                                 </button>
                               </li>
                               <li>
-                                <button 
-                                  className="dropdown-item text-danger" 
+                                <button
+                                  className="dropdown-item text-danger"
                                   onClick={() => handleDelete(msg._id)}
                                 >
                                   <i className="fas fa-trash-alt me-2"></i>Delete
@@ -335,14 +335,14 @@ const Forum = () => {
                           <p className="card-text mb-4">{msg.content || msg.message}</p>
                           <div className="d-flex flex-wrap justify-content-between align-items-center mt-3">
                             <div className="mb-2 mb-md-0">
-                              <button 
+                              <button
                                 className={`btn btn-sm ${msg.likedBy && msg.likedBy.includes(userIdFromStorage) ? "btn-primary" : "btn-outline-primary"}`}
                                 onClick={() => handleLike(msg._id, msg.likedBy && msg.likedBy.includes(userIdFromStorage))}
                               >
-                                <i className={`${msg.likedBy && msg.likedBy.includes(userIdFromStorage) ? "fas" : "far"} fa-thumbs-up me-1`}></i> 
+                                <i className={`${msg.likedBy && msg.likedBy.includes(userIdFromStorage) ? "fas" : "far"} fa-thumbs-up me-1`}></i>
                                 {msg.likes || 0} {msg.likes === 1 ? "Like" : "Likes"}
                               </button>
-                              
+
                               <button
                                 className={`btn btn-sm ${replyingTo === msg._id ? "btn-primary" : "btn-outline-primary"} ms-2`}
                                 onClick={() => {
@@ -350,12 +350,12 @@ const Forum = () => {
                                   setReplyText("");
                                 }}
                               >
-                                <i className="far fa-comment me-1"></i> 
+                                <i className="far fa-comment me-1"></i>
                                 {msg.replies && msg.replies.length > 0 ? msg.replies.length : ""} Reply
                               </button>
                             </div>
                           </div>
-                          
+
                           {/* Reply form */}
                           {replyingTo === msg._id && (
                             <div className="mt-4 border-top pt-3">
@@ -393,7 +393,7 @@ const Forum = () => {
                               </div>
                             </div>
                           )}
-                          
+
                           {/* Replies section */}
                           {msg.replies && msg.replies.length > 0 && (
                             <div className="replies mt-4 pt-3 border-top">
@@ -431,4 +431,4 @@ const Forum = () => {
   );
 };
 
-export default Forum; 
+export default Forum;

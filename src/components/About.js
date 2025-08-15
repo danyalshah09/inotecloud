@@ -3,22 +3,22 @@ import './About.css'; // Add a custom CSS file for styles
 
 const About = () => {
   return (
-    <div className="about-section container">
+    <div className="about-section container min-h-screen">
       <div className="row align-items-center">
         {/* Left Column: Image */}
         <div className="col-md-6 text-center">
-          <img 
-            src="notes.jpg" 
-            alt="About Notes App" 
+          <img
+            src="notes.jpg"
+            alt="About Notes App"
             className="img-fluid about-image"
           />
         </div>
-        
+
         {/* Right Column: Content */}
         <div className="col-md-6">
           <h1 className="about-title text-white">Welcome to Notes App!</h1>
           <p className="about-description">
-            Our Notes App is designed to simplify your life by helping you organize and manage your tasks, ideas, and important information efficiently. 
+            Our Notes App is designed to simplify your life by helping you organize and manage your tasks, ideas, and important information efficiently.
             Create, edit, and manage notes seamlessly with our user-friendly interface.
           </p>
           <ul className="about-features list-unstyled">

@@ -31,7 +31,7 @@ const Home = () => {
     }
 
     return (
-        <div className="background-radial-gradient min-vh-100">
+        <div>
             <div className="container py-4">
                 <div className="row">
                     <div className="col-12">
@@ -41,9 +41,9 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-                
+
                 {isLoggedIn ? <Notes /> : null}
-                
+
                 <footer className="mt-5 text-center text-white-50">
                     <p className="small mb-0">© 2024 iNoteCloud. All rights reserved.</p>
                 </footer>

@@ -11,16 +11,16 @@ const DirectPostTest = () => {
     setLoading(true);
     setError(null);
     setResult(null);
-    
+
     try {
       const authToken = localStorage.getItem("auth-token");
-      
+
       if (!authToken) {
         setError("No auth token found. Please log in first.");
         setLoading(false);
         return;
       }
-      
+
       const response = await fetch("http://localhost:5000/api/messages/add", {
         method: "POST",
         headers: {
@@ -29,10 +29,10 @@ const DirectPostTest = () => {
         },
         body: JSON.stringify({ content })
       });
-      
+
       const responseText = await response.text();
       console.log("Raw response:", responseText);
-      
+
       let data;
       try {
         data = JSON.parse(responseText);
@@ -41,7 +41,7 @@ const DirectPostTest = () => {
         setLoading(false);
         return;
       }
-      
+
       if (response.ok) {
         setResult(data);
         setContent("");
@@ -57,7 +57,7 @@ const DirectPostTest = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-6">
       <div className="card">
         <div className="card-header bg-primary text-white">
           <h3>Direct Message Post Test</h3>
@@ -75,23 +75,23 @@ const DirectPostTest = () => {
                 required
               />
             </div>
-            
-            <button 
-              type="submit" 
+
+            <button
+              type="submit"
               className="btn btn-primary"
               disabled={loading}
             >
               {loading ? "Posting..." : "Post Message"}
             </button>
           </form>
-          
+
           {error && (
             <div className="alert alert-danger mt-3">
               <h5>Error:</h5>
               <pre className="mb-0">{error}</pre>
             </div>
           )}
-          
+
           {result && (
             <div className="alert alert-success mt-3">
               <h5>Success!</h5>
@@ -104,4 +104,4 @@ const DirectPostTest = () => {
   );
 };
 
-export default DirectPostTest; 
+export default DirectPostTest;

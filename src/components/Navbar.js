@@ -11,7 +11,7 @@ const Navbar = () => {
     // Check login status on component mount or location change
     const authToken = localStorage.getItem("auth-token");
     setIsLoggedIn(!!authToken);
-    
+
     if (authToken) {
       const storedName = localStorage.getItem("user-name");
       setUserName(storedName || "");
@@ -27,7 +27,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark p-3">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
           iNoteCloud
@@ -71,12 +71,12 @@ const Navbar = () => {
               </Link>
             </li>
           </ul>
-          
+
           <div className="d-flex align-items-center">
             {isLoggedIn && userName && (
               <span className="text-light me-3 d-none d-md-block">Welcome, {userName}</span>
             )}
-            
+
             {!isLoggedIn ? (
               <>
                 <Link className="btn btn-primary me-2" to="/login">

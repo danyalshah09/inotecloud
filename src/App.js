@@ -23,31 +23,34 @@ const ProtectedRoute = ({ element }) => {
 function App() {
   return (
     <>
-      <NoteState>
-        <MessageState>
-          <Router>
-            <Navbar />
-            <div className="container">
-              <Routes>
-                {/* Protect Home route */}
-                <Route
-                  exact
-                  path="/"
-                  element={<ProtectedRoute element={<Home />} />}
-                />
-                <Route exact path="/about" element={<About />} />
-                <Route exact path="/login" element={<Login />} />
-                <Route exact path="/signup" element={<Signup />} />
-                <Route
-                  exact
-                  path="/forum"
-                  element={<ProtectedRoute element={<Forum />} />}
-                />
-              </Routes>
-            </div>
-          </Router>
-        </MessageState>
-      </NoteState>
+      <div className="background-radial-gradient"></div>
+      <div className="app-content min-h-screen">
+        <NoteState>
+          <MessageState>
+            <Router>
+              <Navbar />
+              <div className="container">
+                <Routes>
+                  {/* Protect Home route */}
+                  <Route
+                    exact
+                    path="/"
+                    element={<ProtectedRoute element={<Home />} />}
+                  />
+                  <Route exact path="/about" element={<About />} />
+                  <Route exact path="/login" element={<Login />} />
+                  <Route exact path="/signup" element={<Signup />} />
+                  <Route
+                    exact
+                    path="/forum"
+                    element={<ProtectedRoute element={<Forum />} />}
+                  />
+                </Routes>
+              </div>
+            </Router>
+          </MessageState>
+        </NoteState>
+      </div>
     </>
   );
 }
