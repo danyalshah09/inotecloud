@@ -18,7 +18,7 @@ const AddMessage = () => {
     setError("");
     setSuccessMessage("");
     setIsSubmitting(true);
-    
+
     try {
       // Ensure the user is logged in
       const authToken = localStorage.getItem("auth-token");
@@ -26,20 +26,19 @@ const AddMessage = () => {
         setError("You must be logged in to post a message. Please log in and try again.");
         return;
       }
-      
-      console.log("Submitting message:", content);
+
       const result = await addMessage(content);
-      
+
       if (result) {
         // Success
         setContent("");
         setSuccessMessage("Message posted successfully!");
-        
+
         // Clear success message after 3 seconds
         setTimeout(() => {
           setSuccessMessage("");
         }, 3000);
-        
+
         // Refresh the messages list
         getMessages();
       } else {
@@ -66,14 +65,14 @@ const AddMessage = () => {
             {error}
           </div>
         )}
-        
+
         {successMessage && (
           <div className="alert alert-success mb-3" role="alert">
             <i className="fas fa-check-circle me-2"></i>
             {successMessage}
           </div>
         )}
-        
+
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <textarea
@@ -87,8 +86,8 @@ const AddMessage = () => {
             ></textarea>
           </div>
           <div className="d-grid">
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="btn btn-primary"
               disabled={isSubmitting || content.trim() === ""}
             >
@@ -108,4 +107,4 @@ const AddMessage = () => {
   );
 };
 
-export default AddMessage; 
+export default AddMessage;

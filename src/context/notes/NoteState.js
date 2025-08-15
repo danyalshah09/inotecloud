@@ -19,13 +19,11 @@ const NoteState = (props) => {
           "auth-token": authToken
         },
       });
-   
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const fetchedNotes = await response.json();
-      console.log("Fetched Notes:", fetchedNotes); // Add this for debugging
-      console.log("Auth Token:", authToken);
 
       setNotes(fetchedNotes);
     } catch (error) {
@@ -33,13 +31,11 @@ const NoteState = (props) => {
     }
   };
 
-   
+
   // Add a Note
   const addNote = async (title, description, tag) => {
     try {
-      console.log("Adding note with data:", { title, description, tag });
       const authToken = localStorage.getItem("auth-token");
-      console.log("Auth token:", authToken ? "Present" : "Missing");
 
       const response = await fetch(`${host}/api/notes/addnote`, {
         method: "POST",
@@ -57,7 +53,6 @@ const NoteState = (props) => {
       }
 
       const newNote = await response.json();
-      console.log("Note added successfully:", newNote);
       setNotes(notes.concat(newNote));
       return newNote;
     } catch (error) {
@@ -78,8 +73,7 @@ const NoteState = (props) => {
         "auth-token": authToken
       },
     });
-   
-    console.log("Deleting the note with id " + id);
+
     const newNotes = notes.filter((note) => note._id !== id);
     setNotes(newNotes);
   };
@@ -96,7 +90,7 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ title, description, tag }),
     });
-   
+
     const newNotes = notes.map((note) =>
       note._id === id ? { ...note, title, description, tag } : note
     );

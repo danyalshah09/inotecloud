@@ -55,7 +55,6 @@ export const Signup = ({ setAlertMessage }) => {
       });
 
       const json = await response.json();
-      console.log("Signup response:", json);
 
       if (response.ok) {
         localStorage.setItem("auth-token", json.authToken);

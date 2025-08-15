@@ -19,7 +19,7 @@ const MessageItem = ({ message, updateMessage }) => {
   useEffect(() => {
     // Get current user ID
     const userId = localStorage.getItem("user-id");
-    
+
     // If we have the user ID and message has likedBy array, check if user has liked
     if (userId && message.likedBy) {
       const userHasLiked = message.likedBy.some(id => id === userId);
@@ -38,7 +38,7 @@ const MessageItem = ({ message, updateMessage }) => {
 
   const handleLikeToggle = useCallback(async () => {
     if (likeInProgress) return;
-    
+
     setApiError("");
     setLikeInProgress(true);
     try {
@@ -57,7 +57,6 @@ const MessageItem = ({ message, updateMessage }) => {
           setHasLiked(true);
         } else if (result === 'already-liked') {
           setHasLiked(true);
-          console.log("You've already liked this message");
         } else {
           setApiError("Failed to like the message");
         }
@@ -84,7 +83,7 @@ const MessageItem = ({ message, updateMessage }) => {
     // Use our utility to get the user ID
     const currentUserId = getUserIdFromToken();
     if (!currentUserId) return false;
-    
+
     // Check if the current user ID matches the message creator's ID
     if (typeof message.user === 'object') {
       return message.user._id === currentUserId;
@@ -112,7 +111,7 @@ const MessageItem = ({ message, updateMessage }) => {
       setApiError("Message content cannot be empty");
       return;
     }
-    
+
     setIsSubmitting(true);
     setApiError("");
     try {
@@ -133,7 +132,7 @@ const MessageItem = ({ message, updateMessage }) => {
   const handleAddReply = useCallback(async (e) => {
     e.preventDefault();
     if (replyContent.trim() === "" || isSubmitting) return;
-    
+
     setIsSubmitting(true);
     setApiError("");
     try {
@@ -160,7 +159,7 @@ const MessageItem = ({ message, updateMessage }) => {
             {apiError}
           </div>
         )}
-      
+
         {editMode ? (
           <div className="mb-3">
             <textarea
@@ -260,7 +259,7 @@ const MessageItem = ({ message, updateMessage }) => {
             ) : (
               <p className="text-muted mb-3">No replies yet.</p>
             )}
-            
+
             <form onSubmit={handleAddReply} className="mt-3">
               <div className="input-group">
                 <input
@@ -292,4 +291,4 @@ const MessageItem = ({ message, updateMessage }) => {
 };
 
 // Wrap in memo to prevent unnecessary re-renders
-export default memo(MessageItem); 
+export default memo(MessageItem);

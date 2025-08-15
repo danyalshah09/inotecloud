@@ -34,16 +34,13 @@ const MessageState = (props) => {
   // Add a message
   const addMessage = async (content) => {
     try {
-      console.log("Sending message with content:", content);
       const authToken = localStorage.getItem("auth-token");
-      
+
       if (!authToken) {
         console.error("No auth token found. User might not be logged in.");
         return null;
       }
-      
-      console.log("Using auth token:", authToken.substring(0, 15) + "...");
-      
+
       // Create the request options
       const options = {
         method: "POST",
@@ -53,36 +50,22 @@ const MessageState = (props) => {
         },
         body: JSON.stringify({ content }),
       };
-      
-      console.log("Request options:", {
-        method: options.method,
-        headers: { ...options.headers, "auth-token": "HIDDEN" },
-        body: options.body
-      });
-      
-      // Log a simplified curl command for debugging
-      console.log(`Equivalent curl command: curl -X POST http://localhost:5000/api/messages/add -H "Content-Type: application/json" -H "auth-token: [TOKEN]" -d '${options.body}'`);
-      
+
       const response = await fetch(`${host}/api/messages/add`, options);
-      console.log("Response status:", response.status);
-      
+
       // Get the raw text response first
       const rawResponse = await response.text();
-      console.log("Raw response:", rawResponse);
-      
+
       let responseData;
       try {
         // Then attempt to parse it as JSON
         responseData = rawResponse ? JSON.parse(rawResponse) : {};
-        console.log("Parsed response data:", responseData);
       } catch (jsonError) {
         console.error("Error parsing response JSON:", jsonError.message);
-        console.error("Raw response was:", rawResponse);
         responseData = { error: "Invalid response format" };
       }
 
       if (response.ok) {
-        console.log("Message added successfully:", responseData);
         // Create a new array with the new message at the beginning
         const updatedMessages = [responseData, ...messages];
         setMessages(updatedMessages);
@@ -93,7 +76,6 @@ const MessageState = (props) => {
       }
     } catch (error) {
       console.error("Error adding message:", error.message);
-      console.error("Error stack:", error.stack);
       return null;
     }
   };
@@ -101,14 +83,13 @@ const MessageState = (props) => {
   // Delete a message
   const deleteMessage = async (id) => {
     try {
-      console.log("Deleting message with ID:", id);
       const authToken = localStorage.getItem("auth-token");
-      
+
       if (!authToken) {
         console.error("No auth token found for deleting message");
         return null;
       }
-      
+
       const response = await fetch(`${host}/api/messages/delete/${id}`, {
         method: "DELETE",
         headers: {
@@ -118,8 +99,7 @@ const MessageState = (props) => {
       });
 
       const responseText = await response.text();
-      console.log("Delete message response:", responseText);
-      
+
       if (response.ok) {
         // Filter out the deleted message
         const newMessages = messages.filter((message) => message._id !== id);
@@ -138,14 +118,13 @@ const MessageState = (props) => {
   // Update a message
   const updateMessage = async (id, content) => {
     try {
-      console.log("Updating message with ID:", id);
       const authToken = localStorage.getItem("auth-token");
-      
+
       if (!authToken) {
         console.error("No auth token found for updating message");
         return null;
       }
-      
+
       const response = await fetch(`${host}/api/messages/update/${id}`, {
         method: "PUT",
         headers: {
@@ -156,16 +135,15 @@ const MessageState = (props) => {
       });
 
       const responseText = await response.text();
-      console.log("Update message response:", responseText);
-      
+
       if (response.ok) {
         try {
           // Parse the JSON response
           const updatedMessage = JSON.parse(responseText);
-          
+
           // Create a deep copy of messages to update
           const newMessages = JSON.parse(JSON.stringify(messages));
-          
+
           // Find and replace the updated message
           for (let i = 0; i < newMessages.length; i++) {
             if (newMessages[i]._id === id) {
@@ -192,14 +170,13 @@ const MessageState = (props) => {
   // Add a reply to a message
   const addReply = async (messageId, content) => {
     try {
-      console.log("Adding reply to message with ID:", messageId);
       const authToken = localStorage.getItem("auth-token");
-      
+
       if (!authToken) {
         console.error("No auth token found for adding reply");
         return null;
       }
-      
+
       const response = await fetch(`${host}/api/messages/reply/${messageId}`, {
         method: "POST",
         headers: {
@@ -210,16 +187,15 @@ const MessageState = (props) => {
       });
 
       const responseText = await response.text();
-      console.log("Add reply response:", responseText);
-      
+
       if (response.ok) {
         try {
           // Parse the JSON response
           const updatedMessage = JSON.parse(responseText);
-          
+
           // Create a deep copy of messages to update
           const newMessages = JSON.parse(JSON.stringify(messages));
-          
+
           // Find and replace the updated message
           for (let i = 0; i < newMessages.length; i++) {
             if (newMessages[i]._id === messageId) {
@@ -251,7 +227,7 @@ const MessageState = (props) => {
         console.error("No auth token found. User might not be logged in.");
         return false;
       }
-      
+
       const response = await fetch(`${host}/api/messages/like/${id}`, {
         method: "PUT",
         headers: {
@@ -272,7 +248,7 @@ const MessageState = (props) => {
       if (response.ok) {
         const updatedMessage = data;
         const newMessages = JSON.parse(JSON.stringify(messages));
-        
+
         // Find and replace the updated message
         for (let i = 0; i < newMessages.length; i++) {
           if (newMessages[i]._id === id) {
@@ -284,7 +260,6 @@ const MessageState = (props) => {
         return true;
       } else {
         if (data.alreadyLiked) {
-          console.log("User has already liked this message");
           return 'already-liked';
         }
         console.error("Error liking message:", data.error);
@@ -304,7 +279,7 @@ const MessageState = (props) => {
         console.error("No auth token found. User might not be logged in.");
         return false;
       }
-      
+
       const response = await fetch(`${host}/api/messages/unlike/${id}`, {
         method: "PUT",
         headers: {
@@ -325,7 +300,7 @@ const MessageState = (props) => {
       if (response.ok) {
         const updatedMessage = data;
         const newMessages = JSON.parse(JSON.stringify(messages));
-        
+
         // Find and replace the updated message
         for (let i = 0; i < newMessages.length; i++) {
           if (newMessages[i]._id === id) {
@@ -348,19 +323,19 @@ const MessageState = (props) => {
   // Check if the current user has liked a message
   const hasUserLikedMessage = (message) => {
     if (!message || !message.likedBy) return false;
-    
+
     // Try to get user ID from the authToken
     const authToken = localStorage.getItem("auth-token");
     if (!authToken) return false;
-    
+
     try {
       // Decode JWT to get user ID
       const tokenParts = authToken.split('.');
       if (tokenParts.length !== 3) return false;
-      
+
       const payload = JSON.parse(atob(tokenParts[1]));
       const userId = payload.user.id;
-      
+
       // Check if userId exists in the likedBy array
       return message.likedBy.some(id => id.toString() === userId);
     } catch (error) {
@@ -388,4 +363,4 @@ const MessageState = (props) => {
   );
 };
 
-export default MessageState; 
+export default MessageState;
