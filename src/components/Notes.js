@@ -57,14 +57,25 @@ const Notes = () => {
 
   const handleClick = async (e) => {
     e.preventDefault();
+
+    // Validate input fields
+    if (!note.etitle.trim() || note.etitle.trim().length < 3) {
+      alert("Title must be at least 3 characters long.");
+      return;
+    }
+
+    if (!note.edescription.trim() || note.edescription.trim().length < 5) {
+      alert("Description must be at least 5 characters long.");
+      return;
+    }
+
     try {
-      await editNote(note.id, note.etitle, note.edescription, note.etag);
+      await editNote(note.id, note.etitle.trim(), note.edescription.trim(), note.etag.trim());
       const modal = window.bootstrap.Modal.getInstance(document.getElementById("exampleModal"));
       modal.hide();
-      // You could add a success toast here if you have toast notifications
+      alert("Note updated successfully!");
     } catch (error) {
       console.error("Error updating note:", error);
-      // You could add an error toast here if you have toast notifications
       alert("Failed to update note. Please try again.");
     }
   };

@@ -44,9 +44,14 @@ const NoteItem = (props) => {
             </button>
             <button
               className="btn btn-sm btn-outline-danger"
-              onClick={() => {
+              onClick={async () => {
                 if (window.confirm("Are you sure you want to delete this note?")) {
-                  deleteNote(note._id);
+                  try {
+                    await deleteNote(note._id);
+                  } catch (error) {
+                    console.error("Error deleting note:", error);
+                    alert("Failed to delete note. Please try again.");
+                  }
                 }
               }}
             >
@@ -80,9 +85,14 @@ const NoteItem = (props) => {
             </button>
             <button
               className="btn btn-sm btn-icon text-danger"
-              onClick={() => {
+              onClick={async () => {
                 if (window.confirm("Are you sure you want to delete this note?")) {
-                  deleteNote(note._id);
+                  try {
+                    await deleteNote(note._id);
+                  } catch (error) {
+                    console.error("Error deleting note:", error);
+                    alert("Failed to delete note. Please try again.");
+                  }
                 }
               }}
               title="Delete note"
